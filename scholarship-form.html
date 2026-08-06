@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scholarship Application – ALIF Foundation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { alifTeal:'#194341', alifYellow:'#FFCD28', alifGreen:'#2CB770', textGray:'#5F6973' } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family:'Inter',sans-serif; background:linear-gradient(to bottom,#F0FDF4,#FFFFFF); }
+    @keyframes marquee{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+    .animate-marquee{display:inline-block;white-space:nowrap;animation:marquee 25s linear infinite;}
+    .form-input { @apply w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-alifGreen focus:ring-1 focus:ring-alifGreen text-sm transition; }
+    .form-label { @apply block text-sm font-semibold text-alifTeal mb-2; }
+    .section-title { @apply text-lg font-black text-alifTeal uppercase mb-6 flex items-center gap-3; }
+    .step { display:none; }
+    .step.active { display:block; }
+  </style>
+</head>
+<body class="bg-white">
+
+<!-- News Ticker -->
+<div class="bg-alifTeal py-2 overflow-hidden border-b border-white/10">
+  <div class="animate-marquee text-white text-xs font-bold uppercase tracking-[0.2em]">
+    LATEST NEWS: ALIF Scholarship Application for 2026 now open • Apply before the deadline •
+  </div>
+</div>
+
+<!-- Navbar -->
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm">
+  <div class="max-w-7xl mx-auto flex items-center justify-between py-4 px-6">
+    <a href="index.html"><img src="alif-logo.png" alt="ALIF Foundation Logo" class="h-12 w-auto"/></a>
+    <nav class="hidden md:flex flex-1 justify-center space-x-8">
+      <a href="index.html" class="text-textGray font-semibold hover:text-alifTeal transition">Home</a>
+      <a href="scholarship.html" class="text-textGray font-semibold hover:text-alifTeal transition">Scholarship</a>
+      <a href="contact.html" class="text-textGray font-semibold hover:text-alifTeal transition">Contact</a>
+      <a href="login.html" class="text-textGray font-semibold hover:text-alifTeal transition">Student Login</a>
+    </nav>
+    <button class="md:hidden p-2" onclick="document.getElementById('mob-menu').classList.toggle('hidden')">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+  <div id="mob-menu" class="md:hidden hidden bg-white w-full shadow-lg">
+    <div class="flex flex-col items-center py-4 space-y-3">
+      <a href="index.html" class="text-textGray font-semibold">Home</a>
+      <a href="scholarship.html" class="text-textGray font-semibold">Scholarship</a>
+      <a href="login.html" class="text-textGray font-semibold">Student Login</a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="bg-alifTeal py-14 px-6 text-center">
+  <span class="inline-block rounded-full px-6 py-2 text-alifTeal font-extrabold text-xs uppercase bg-alifYellow mb-4">2026 Cycle</span>
+  <h1 class="text-3xl md:text-5xl font-black text-white mb-4">Scholarship Application Form</h1>
+  <p class="text-white/80 max-w-xl mx-auto">Complete all sections carefully. Ensure all uploaded documents are clear and legible. Passport photograph is required before all other uploads.</p>
+</section>
+
+<!-- Progress Bar -->
+<div class="max-w-3xl mx-auto px-6 mt-8">
+  <div class="flex items-center justify-between mb-2">
+    <span id="step-label" class="text-sm font-bold text-alifTeal">Step 1 of 4: Personal Information</span>
+    <span id="step-count" class="text-sm text-textGray">25%</span>
+  </div>
+  <div class="w-full bg-gray-200 rounded-full h-2">
+    <div id="progress-bar" class="bg-alifGreen h-2 rounded-full transition-all duration-500" style="width:25%"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed top-6 right-6 z-50 hidden">
+  <div id="toast-inner" class="flex items-center gap-3 px-5 py-4 rounded-2xl shadow-xl text-sm font-semibold text-white max-w-sm">
+    <span id="toast-icon">✓</span>
+    <span id="toast-msg"></span>
+  </div>
+</div>
+
+<!-- Form -->
+<div class="max-w-3xl mx-auto px-6 py-10">
+  <form id="application-form" enctype="multipart/form-data">
+
+    <!-- Step 1: Personal Info -->
+    <div class="step active bg-white rounded-3xl shadow-sm border border-[#E5F7EC] p-8 mb-6" id="step-1">
+      <h2 class="section-title">
+        <span class="w-8 h-8 bg-alifTeal text-white rounded-full flex items-center justify-center text-sm font-black">1</span>
+        Personal Information
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="md:col-span-2">
+          <label class="form-label">Full Name *</label>
+          <input type="text" name="full_name" required placeholder="As on birth certificate" class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Email Address *</label>
+          <input type="email" name="email" required placeholder="your@email.com" class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Phone Number *</label>
+          <input type="tel" name="phone" required placeholder="+234 xxx xxx xxxx" class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Date of Birth *</label>
+          <input type="date" name="dob" required class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Gender *</label>
+          <select name="gender" required class="form-input">
+            <option value="">Select gender</option>
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+        </div>
+        <div class="md:col-span-2">
+          <label class="form-label">Residential Address *</label>
+          <input type="text" name="address" required placeholder="Full residential address" class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Local Government Area *</label>
+          <input type="text" name="lga" required placeholder="LGA" class="form-input">
+        </div>
+        <div>
+          <label class="form-label">State *</label>
+          <input type="text" name="state" required placeholder="State of origin" class="form-input">
+        </div>
+      </div>
+      <div class="flex justify-end mt-8">
+        <button type="button" onclick="nextStep(1)" class="bg-alifTeal text-white font-bold px-8 py-3 rounded-full hover:bg-alifGreen transition">Next: Academic Info →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Academic Info -->
+    <div class="step bg-white rounded-3xl shadow-sm border border-[#E5F7EC] p-8 mb-6" id="step-2">
+      <h2 class="section-title">
+        <span class="w-8 h-8 bg-alifTeal text-white rounded-full flex items-center justify-center text-sm font-black">2</span>
+        Academic Information
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="md:col-span-2">
+          <label class="form-label">Institution *</label>
+          <input type="text" name="institution" required placeholder="Name of your school/university" class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Faculty</label>
+          <input type="text" name="faculty" placeholder="Faculty/College" class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Department *</label>
+          <input type="text" name="department" required placeholder="Your department" class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Course *</label>
+          <input type="text" name="course" required placeholder="Course of study" class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Level *</label>
+          <select name="level" required class="form-input">
+            <option value="">Select level</option>
+            <option>100 Level</option><option>200 Level</option><option>300 Level</option>
+            <option>400 Level</option><option>500 Level</option><option>600 Level</option>
+            <option>SS1</option><option>SS2</option><option>SS3</option>
+            <option>ND1</option><option>ND2</option><option>HND1</option><option>HND2</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Matriculation Number</label>
+          <input type="text" name="matric_number" placeholder="Matric/Reg number" class="form-input">
+        </div>
+        <div>
+          <label class="form-label">CGPA (if applicable)</label>
+          <input type="text" name="cgpa" placeholder="e.g. 4.50/5.00" class="form-input">
+        </div>
+      </div>
+      <div class="flex justify-between mt-8">
+        <button type="button" onclick="prevStep(2)" class="bg-gray-100 text-textGray font-bold px-8 py-3 rounded-full hover:bg-gray-200 transition">← Back</button>
+        <button type="button" onclick="nextStep(2)" class="bg-alifTeal text-white font-bold px-8 py-3 rounded-full hover:bg-alifGreen transition">Next: Upload Documents →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Documents -->
+    <div class="step bg-white rounded-3xl shadow-sm border border-[#E5F7EC] p-8 mb-6" id="step-3">
+      <h2 class="section-title">
+        <span class="w-8 h-8 bg-alifTeal text-white rounded-full flex items-center justify-center text-sm font-black">3</span>
+        Upload Documents
+      </h2>
+      <div class="bg-alifYellow/10 border border-alifYellow rounded-2xl p-4 mb-6 text-sm text-alifTeal font-medium">
+        ⚠️ <strong>Passport photograph must be uploaded first.</strong> Accepted formats: JPG, PNG, PDF, DOC, DOCX. Max 20MB per file.
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="md:col-span-2">
+          <label class="form-label">Passport Photograph * <span class="text-alifGreen text-xs font-normal">(Upload this first)</span></label>
+          <input type="file" name="passport_photo" required accept=".jpg,.jpeg,.png" id="passport_photo" class="w-full border border-alifGreen rounded-xl px-4 py-3 text-sm focus:outline-none cursor-pointer file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:bg-alifTeal file:text-white file:font-semibold">
+          <div id="passport-preview" class="mt-3 hidden"><img id="passport-img" class="w-24 h-24 object-cover rounded-xl border-2 border-alifGreen" src=""></div>
+        </div>
+        <div>
+          <label class="form-label">WAEC Result *</label>
+          <input type="file" name="waec_result" required accept=".jpg,.jpeg,.png,.pdf" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none cursor-pointer file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:bg-gray-100 file:text-alifTeal file:font-semibold">
+        </div>
+        <div>
+          <label class="form-label">JAMB Result *</label>
+          <input type="file" name="jamb_result" required accept=".jpg,.jpeg,.png,.pdf" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none cursor-pointer file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:bg-gray-100 file:text-alifTeal file:font-semibold">
+        </div>
+        <div>
+          <label class="form-label">Admission Letter *</label>
+          <input type="file" name="admission_letter" required accept=".jpg,.jpeg,.png,.pdf" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none cursor-pointer file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:bg-gray-100 file:text-alifTeal file:font-semibold">
+        </div>
+        <div>
+          <label class="form-label">School ID Card *</label>
+          <input type="file" name="school_id" required accept=".jpg,.jpeg,.png,.pdf" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none cursor-pointer file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:bg-gray-100 file:text-alifTeal file:font-semibold">
+        </div>
+        <div>
+          <label class="form-label">Birth Certificate *</label>
+          <input type="file" name="birth_certificate" required accept=".jpg,.jpeg,.png,.pdf" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none cursor-pointer file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:bg-gray-100 file:text-alifTeal file:font-semibold">
+        </div>
+        <div>
+          <label class="form-label">LGA Certificate *</label>
+          <input type="file" name="lga_certificate" required accept=".jpg,.jpeg,.png,.pdf" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none cursor-pointer file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:bg-gray-100 file:text-alifTeal file:font-semibold">
+        </div>
+        <div>
+          <label class="form-label">Transcript <span class="text-gray-400 font-normal text-xs">(Optional)</span></label>
+          <input type="file" name="transcript" accept=".jpg,.jpeg,.png,.pdf" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none cursor-pointer file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:bg-gray-100 file:text-alifTeal file:font-semibold">
+        </div>
+        <div>
+          <label class="form-label">Recommendation Letter <span class="text-gray-400 font-normal text-xs">(Optional)</span></label>
+          <input type="file" name="recommendation_letter" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none cursor-pointer file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:bg-gray-100 file:text-alifTeal file:font-semibold">
+        </div>
+      </div>
+      <div class="flex justify-between mt-8">
+        <button type="button" onclick="prevStep(3)" class="bg-gray-100 text-textGray font-bold px-8 py-3 rounded-full hover:bg-gray-200 transition">← Back</button>
+        <button type="button" onclick="nextStep(3)" class="bg-alifTeal text-white font-bold px-8 py-3 rounded-full hover:bg-alifGreen transition">Next: Review & Submit →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Declaration & Submit -->
+    <div class="step bg-white rounded-3xl shadow-sm border border-[#E5F7EC] p-8 mb-6" id="step-4">
+      <h2 class="section-title">
+        <span class="w-8 h-8 bg-alifTeal text-white rounded-full flex items-center justify-center text-sm font-black">4</span>
+        Declaration & Submit
+      </h2>
+
+      <!-- Summary Preview -->
+      <div id="summary" class="bg-[#F9FDF9] border border-[#D1F7DE] rounded-2xl p-6 mb-6 text-sm text-textGray space-y-1"></div>
+
+      <div class="bg-white border-2 border-alifGreen rounded-2xl p-6 mb-6">
+        <label class="flex items-start gap-4 cursor-pointer">
+          <input type="checkbox" name="declaration" value="true" required id="declaration-cb" class="mt-1 w-5 h-5 accent-alifGreen flex-shrink-0">
+          <span class="text-sm text-textGray leading-relaxed">
+            I, the applicant, hereby certify that all information provided in this application form is <strong>true, correct, and complete</strong> to the best of my knowledge. I understand that any false or misleading information will result in the immediate disqualification of my application. I agree to comply with all rules and conditions of the ALIF Scholarship Programme.
+          </span>
+        </label>
+      </div>
+
+      <div class="flex justify-between mt-8 items-center">
+        <button type="button" onclick="prevStep(4)" class="bg-gray-100 text-textGray font-bold px-8 py-3 rounded-full hover:bg-gray-200 transition">← Back</button>
+        <button type="submit" id="submit-btn" class="bg-alifYellow text-alifTeal font-extrabold px-12 py-4 rounded-full shadow-xl hover:scale-105 transition-all text-lg">
+          Submit Application
+        </button>
+      </div>
+    </div>
+
+  </form>
+
+  <!-- Success State -->
+  <div id="success-state" class="hidden text-center py-20">
+    <div class="w-24 h-24 bg-alifGreen/10 rounded-full flex items-center justify-center mx-auto mb-6">
+      <svg class="w-12 h-12 text-alifGreen" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    </div>
+    <h2 class="text-3xl font-black text-alifTeal mb-4">Application Submitted!</h2>
+    <p class="text-textGray mb-4 max-w-md mx-auto">Your scholarship application has been received. Please check your email for a confirmation message with your Application ID.</p>
+    <div class="inline-block bg-[#F0FDF4] border border-alifGreen rounded-2xl px-8 py-4 mb-8">
+      <p class="text-alifTeal font-bold">Application ID: <span id="success-app-id" class="text-alifGreen font-black text-xl"></span></p>
+    </div>
+    <br>
+    <a href="index.html" class="inline-block bg-alifTeal text-white font-bold px-8 py-3 rounded-full hover:bg-alifGreen transition">← Return to Homepage</a>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+  const API = window.API_BASE || '';
+  let currentStep = 1;
+  const totalSteps = 4;
+  const stepLabels = ['Personal Information', 'Academic Information', 'Upload Documents', 'Declaration & Submit'];
+
+  function showStep(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById(`step-${n}`).classList.add('active');
+    currentStep = n;
+    const pct = Math.round((n / totalSteps) * 100);
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('step-label').textContent = `Step ${n} of ${totalSteps}: ${stepLabels[n-1]}`;
+    document.getElementById('step-count').textContent = pct + '%';
+    window.scrollTo({top:0, behavior:'smooth'});
+    if (n === 4) buildSummary();
+  }
+
+  function validateStep(n) {
+    const step = document.getElementById(`step-${n}`);
+    const required = step.querySelectorAll('[required]');
+    for (let el of required) {
+      if (!el.value || (el.type === 'checkbox' && !el.checked)) {
+        el.focus();
+        showToast('Please fill in all required fields', 'error');
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function nextStep(n) {
+    if (validateStep(n)) showStep(n + 1);
+  }
+
+  function prevStep(n) {
+    showStep(n - 1);
+  }
+
+  function buildSummary() {
+    const form = document.getElementById('application-form');
+    const fd = new FormData(form);
+    const s = document.getElementById('summary');
+    const fields = [
+      ['Full Name', 'full_name'], ['Email', 'email'], ['Phone', 'phone'],
+      ['Institution', 'institution'], ['Department', 'department'], ['Course', 'course'], ['Level', 'level']
+    ];
+    s.innerHTML = '<p class="font-bold text-alifTeal mb-3">Application Summary</p>' +
+      fields.map(([label, key]) => {
+        const val = fd.get(key);
+        return val ? `<div class="flex justify-between border-b border-gray-100 py-1.5"><span class="text-alifTeal font-medium">${label}:</span><span>${val}</span></div>` : '';
+      }).join('');
+  }
+
+  // Passport photo preview
+  document.getElementById('passport_photo').addEventListener('change', function() {
+    if (this.files[0]) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        document.getElementById('passport-img').src = e.target.result;
+        document.getElementById('passport-preview').classList.remove('hidden');
+      };
+      reader.readAsDataURL(this.files[0]);
+    }
+  });
+
+  // Form submit
+  document.getElementById('application-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!document.getElementById('declaration-cb').checked) {
+      showToast('Please accept the declaration to continue', 'error');
+      return;
+    }
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+    try {
+      const formData = new FormData(this);
+      formData.set('declaration', 'true');
+      const res = await fetch(`${API}/api/applications`, { method: 'POST', body: formData });
+      const data = await res.json();
+      if (res.ok) {
+        document.getElementById('application-form').classList.add('hidden');
+        document.getElementById('success-state').classList.remove('hidden');
+        document.getElementById('success-app-id').textContent = data.application_id;
+        document.querySelector('.progress-container')?.remove?.();
+      } else {
+        showToast(data.error || 'Submission failed. Please try again.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Submit Application';
+      }
+    } catch (err) {
+      showToast('Network error. Please check your connection and try again.', 'error');
+      btn.disabled = false;
+      btn.textContent = 'Submit Application';
+    }
+  });
+
+  function showToast(msg, type='success') {
+    const toast = document.getElementById('toast');
+    const inner = document.getElementById('toast-inner');
+    const msgEl = document.getElementById('toast-msg');
+    const iconEl = document.getElementById('toast-icon');
+    msgEl.textContent = msg;
+    if (type === 'error') {
+      inner.className = 'flex items-center gap-3 px-5 py-4 rounded-2xl shadow-xl text-sm font-semibold text-white max-w-sm bg-red-500';
+      iconEl.textContent = '✕';
+    } else {
+      inner.className = 'flex items-center gap-3 px-5 py-4 rounded-2xl shadow-xl text-sm font-semibold text-white max-w-sm bg-alifGreen';
+      iconEl.textContent = '✓';
+    }
+    toast.classList.remove('hidden');
+    setTimeout(() => toast.classList.add('hidden'), 4000);
+  }
+</script>
+</body>
+</html>

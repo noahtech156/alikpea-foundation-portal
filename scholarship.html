@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scholarship – ALIF Foundation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { alifTeal:'#194341', alifYellow:'#FFCD28', alifGreen:'#2CB770', textGray:'#5F6973' } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <style>
+    body { font-family:'Inter',sans-serif; background:linear-gradient(to bottom,#F0FDF4,#FFFFFF); }
+    @keyframes marquee{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+    .animate-marquee{display:inline-block;white-space:nowrap;animation:marquee 25s linear infinite;}
+    .animate-marquee:hover{animation-play-state:paused;}
+  </style>
+</head>
+<body class="bg-white">
+
+<!-- News Ticker -->
+<div class="bg-alifTeal py-2 overflow-hidden border-b border-white/10">
+  <div class="animate-marquee text-white text-xs font-bold uppercase tracking-[0.2em]" id="news-ticker-text">
+    LATEST NEWS: ALIF Scholarship Application for 2026 now open • Chief (Dr.) Leemon A. Ikepa receives humanitarian award •
+  </div>
+</div>
+
+<!-- Navbar -->
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm">
+  <div class="max-w-7xl mx-auto flex items-center justify-between py-4 px-6">
+    <a href="index.html"><img src="alif-logo.png" alt="ALIF Foundation Logo" class="h-12 w-auto"/></a>
+    <nav class="hidden md:flex flex-1 justify-center space-x-8">
+      <a href="index.html" class="text-textGray font-semibold hover:text-alifTeal transition">Home</a>
+      <a href="about.html" class="text-textGray font-semibold hover:text-alifTeal transition">About Us</a>
+      <div class="relative group">
+        <button class="text-alifTeal font-semibold flex items-center">Programs
+          <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="hidden group-hover:block absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+          <a href="grant-for-artisans.html" class="block px-4 py-2 text-textGray hover:bg-gray-50 hover:text-alifTeal">Grant for Artisans</a>
+          <a href="scholarship.html" class="block px-4 py-2 text-alifTeal font-bold bg-gray-50">Scholarship</a>
+          <a href="career-counseling.html" class="block px-4 py-2 text-textGray hover:bg-gray-50 hover:text-alifTeal">Career Counseling</a>
+        </div>
+      </div>
+      <a href="events.html" class="text-textGray font-semibold hover:text-alifTeal transition">Latest Events</a>
+      <a href="contact.html" class="text-textGray font-semibold hover:text-alifTeal transition">Contact</a>
+      <a href="scholarship-form.html" class="bg-alifYellow text-alifTeal font-extrabold px-6 py-2 rounded-full shadow-md hover:scale-105 transition-all ml-4">APPLICATION</a>
+    </nav>
+    <button class="md:hidden p-2" onclick="document.getElementById('mob-menu').classList.toggle('hidden')">
+      <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+  <div id="mob-menu" class="md:hidden hidden bg-white w-full shadow-lg">
+    <div class="flex flex-col items-center py-4 space-y-3">
+      <a href="index.html" class="text-textGray font-semibold">Home</a>
+      <a href="about.html" class="text-textGray font-semibold">About Us</a>
+      <a href="grant-for-artisans.html" class="text-textGray font-semibold">Grant for Artisans</a>
+      <a href="scholarship.html" class="text-alifTeal font-bold">Scholarship</a>
+      <a href="career-counseling.html" class="text-textGray font-semibold">Career Counseling</a>
+      <a href="events.html" class="text-textGray font-semibold">Latest Events</a>
+      <a href="contact.html" class="text-textGray font-semibold">Contact</a>
+      <a href="scholarship-form.html" class="bg-alifYellow text-alifTeal font-extrabold px-6 py-2 rounded-full">APPLICATION</a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="relative min-h-[70vh] flex items-center overflow-hidden">
+  <div class="absolute inset-0 z-0">
+    <img src="images/scholarship.jpg" onerror="this.style.display='none'" alt="Scholarship" class="w-full h-full object-cover">
+    <div class="absolute inset-0 bg-gradient-to-r from-[#194341]/95 via-[#194341]/80 to-transparent"></div>
+  </div>
+  <!-- Blobs -->
+  <div class="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
+    <div class="absolute top-10 left-10 w-60 h-60 bg-alifGreen/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 right-10 w-40 h-40 bg-alifYellow/10 rounded-full blur-2xl"></div>
+  </div>
+  <div class="relative z-10 max-w-5xl mx-auto px-6 py-20" data-aos="fade-right">
+    <span class="inline-block rounded-full px-6 py-2 text-white font-extrabold text-xs uppercase bg-gradient-to-r from-alifYellow to-alifGreen mb-6">ALIF Scholarship Programme</span>
+    <h1 class="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
+      Invest in<br><span class="text-alifYellow">Education,</span><br>Change a Life
+    </h1>
+    <p class="text-white/90 text-lg max-w-xl leading-relaxed mb-10">
+      The ALIF Scholarship Programme empowers indigent students with financial support, mentoring, and opportunities to achieve academic excellence and build meaningful futures.
+    </p>
+    <a href="scholarship-form.html" class="inline-block bg-alifYellow text-alifTeal font-extrabold text-lg px-10 py-4 rounded-full shadow-xl hover:scale-105 transition-all">
+      APPLY NOW →
+    </a>
+  </div>
+</section>
+
+<!-- About the Scholarship -->
+<section class="py-20 bg-white" data-aos="fade-up">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="inline-block rounded-full px-6 py-2 text-white font-extrabold text-xs uppercase bg-gradient-to-r from-alifYellow to-alifGreen mb-4">About the Programme</span>
+      <h2 class="text-3xl md:text-4xl font-black text-alifTeal uppercase mb-4">The ALIF Scholarship</h2>
+      <p class="text-textGray max-w-3xl mx-auto leading-relaxed">
+        Our scholarship scheme — the flagship of the ALIF programme — runs through secondary school up to first degree level. It is open to eligible indigent students in public secondary schools, polytechnics, colleges of education, and universities across Nigeria.
+      </p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="bg-[#F9FDF9] border border-[#D1F7DE] rounded-3xl p-8 shadow-sm" data-aos="fade-up" data-aos-delay="100">
+        <h3 class="text-alifTeal font-black text-xl uppercase mb-4">Our Mission</h3>
+        <p class="text-textGray leading-relaxed">To provide access to functional education for less privileged individuals, removing financial barriers that prevent talented students from realising their full potential.</p>
+      </div>
+      <div class="bg-[#F9FDF9] border border-[#D1F7DE] rounded-3xl p-8 shadow-sm" data-aos="fade-up" data-aos-delay="200">
+        <h3 class="text-alifTeal font-black text-xl uppercase mb-4">What Scholars Receive</h3>
+        <ul class="space-y-3 text-textGray">
+          <li class="flex items-start gap-2"><span class="text-alifGreen font-bold">✓</span> Financial assistance for tuition and academic needs</li>
+          <li class="flex items-start gap-2"><span class="text-alifGreen font-bold">✓</span> Periodic academic development events</li>
+          <li class="flex items-start gap-2"><span class="text-alifGreen font-bold">✓</span> Supplementary tutoring and academic remediation</li>
+          <li class="flex items-start gap-2"><span class="text-alifGreen font-bold">✓</span> Access to the ALIF alumni and scholarship network</li>
+          <li class="flex items-start gap-2"><span class="text-alifGreen font-bold">✓</span> Career guidance and professional mentoring</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Eligibility -->
+<section class="py-16 bg-[#F9FDF9]" data-aos="fade-up">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="inline-block rounded-full px-6 py-2 text-white font-extrabold text-xs uppercase bg-gradient-to-r from-alifYellow to-alifGreen mb-4">Who Can Apply</span>
+      <h2 class="text-3xl md:text-4xl font-black text-alifTeal uppercase mb-4">Eligibility Criteria</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-white rounded-3xl p-6 border border-[#E5F7EC] shadow-sm" data-aos="zoom-in" data-aos-delay="100">
+        <div class="w-12 h-12 bg-alifYellow/20 rounded-2xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-alifTeal" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+        </div>
+        <h4 class="text-alifTeal font-bold mb-2">Enrolled Student</h4>
+        <p class="text-textGray text-sm">Must be currently enrolled in a recognised Nigerian secondary or tertiary institution</p>
+      </div>
+      <div class="bg-white rounded-3xl p-6 border border-[#E5F7EC] shadow-sm" data-aos="zoom-in" data-aos-delay="150">
+        <div class="w-12 h-12 bg-alifGreen/20 rounded-2xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-alifGreen" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h4 class="text-alifTeal font-bold mb-2">Valid Admission</h4>
+        <p class="text-textGray text-sm">Must have a valid admission letter from an accredited Nigerian institution</p>
+      </div>
+      <div class="bg-white rounded-3xl p-6 border border-[#E5F7EC] shadow-sm" data-aos="zoom-in" data-aos-delay="200">
+        <div class="w-12 h-12 bg-alifYellow/20 rounded-2xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-alifTeal" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+        </div>
+        <h4 class="text-alifTeal font-bold mb-2">Academic Excellence</h4>
+        <p class="text-textGray text-sm">Demonstrated academic merit and commitment to educational achievement</p>
+      </div>
+      <div class="bg-white rounded-3xl p-6 border border-[#E5F7EC] shadow-sm" data-aos="zoom-in" data-aos-delay="250">
+        <div class="w-12 h-12 bg-alifTeal/10 rounded-2xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-alifTeal" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        </div>
+        <h4 class="text-alifTeal font-bold mb-2">Financial Need</h4>
+        <p class="text-textGray text-sm">Demonstrated financial need — scholarship targets indigent students and orphans</p>
+      </div>
+      <div class="bg-white rounded-3xl p-6 border border-[#E5F7EC] shadow-sm" data-aos="zoom-in" data-aos-delay="300">
+        <div class="w-12 h-12 bg-alifGreen/20 rounded-2xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-alifGreen" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg>
+        </div>
+        <h4 class="text-alifTeal font-bold mb-2">Nigerian Citizen</h4>
+        <p class="text-textGray text-sm">Must be a Nigerian citizen studying in a Nigerian educational institution</p>
+      </div>
+      <div class="bg-white rounded-3xl p-6 border border-[#E5F7EC] shadow-sm" data-aos="zoom-in" data-aos-delay="350">
+        <div class="w-12 h-12 bg-alifYellow/20 rounded-2xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-alifTeal" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        </div>
+        <h4 class="text-alifTeal font-bold mb-2">Complete Documents</h4>
+        <p class="text-textGray text-sm">Must provide all required documents including WAEC, JAMB, and admission letter</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Required Documents -->
+<section class="py-16 bg-white" data-aos="fade-up">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="inline-block rounded-full px-6 py-2 text-white font-extrabold text-xs uppercase bg-gradient-to-r from-alifYellow to-alifGreen mb-4">Required Documents</span>
+      <h2 class="text-3xl md:text-4xl font-black text-alifTeal uppercase mb-4">What You Need to Apply</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div class="bg-[#F0FDF4] border-2 border-alifGreen rounded-2xl p-4 text-center">
+        <div class="text-3xl mb-2">📷</div>
+        <p class="text-alifTeal font-bold text-sm">Passport Photograph</p>
+        <span class="text-xs bg-alifGreen text-white px-2 py-0.5 rounded-full">Required</span>
+      </div>
+      <div class="bg-[#F0FDF4] border border-[#D1F7DE] rounded-2xl p-4 text-center">
+        <div class="text-3xl mb-2">📝</div>
+        <p class="text-alifTeal font-bold text-sm">WAEC Result</p>
+        <span class="text-xs bg-alifGreen text-white px-2 py-0.5 rounded-full">Required</span>
+      </div>
+      <div class="bg-[#F0FDF4] border border-[#D1F7DE] rounded-2xl p-4 text-center">
+        <div class="text-3xl mb-2">📋</div>
+        <p class="text-alifTeal font-bold text-sm">JAMB Result</p>
+        <span class="text-xs bg-alifGreen text-white px-2 py-0.5 rounded-full">Required</span>
+      </div>
+      <div class="bg-[#F0FDF4] border border-[#D1F7DE] rounded-2xl p-4 text-center">
+        <div class="text-3xl mb-2">🎓</div>
+        <p class="text-alifTeal font-bold text-sm">Admission Letter</p>
+        <span class="text-xs bg-alifGreen text-white px-2 py-0.5 rounded-full">Required</span>
+      </div>
+      <div class="bg-[#F0FDF4] border border-[#D1F7DE] rounded-2xl p-4 text-center">
+        <div class="text-3xl mb-2">🪪</div>
+        <p class="text-alifTeal font-bold text-sm">School ID Card</p>
+        <span class="text-xs bg-alifGreen text-white px-2 py-0.5 rounded-full">Required</span>
+      </div>
+      <div class="bg-[#F0FDF4] border border-[#D1F7DE] rounded-2xl p-4 text-center">
+        <div class="text-3xl mb-2">📜</div>
+        <p class="text-alifTeal font-bold text-sm">Birth Certificate</p>
+        <span class="text-xs bg-alifGreen text-white px-2 py-0.5 rounded-full">Required</span>
+      </div>
+      <div class="bg-[#F0FDF4] border border-[#D1F7DE] rounded-2xl p-4 text-center">
+        <div class="text-3xl mb-2">🏛️</div>
+        <p class="text-alifTeal font-bold text-sm">LGA Certificate</p>
+        <span class="text-xs bg-alifGreen text-white px-2 py-0.5 rounded-full">Required</span>
+      </div>
+      <div class="bg-[#F9FDF9] border border-gray-200 rounded-2xl p-4 text-center opacity-75">
+        <div class="text-3xl mb-2">📄</div>
+        <p class="text-alifTeal font-bold text-sm">Transcript</p>
+        <span class="text-xs bg-gray-400 text-white px-2 py-0.5 rounded-full">Optional</span>
+      </div>
+      <div class="bg-[#F9FDF9] border border-gray-200 rounded-2xl p-4 text-center opacity-75">
+        <div class="text-3xl mb-2">✉️</div>
+        <p class="text-alifTeal font-bold text-sm">Recommendation Letter</p>
+        <span class="text-xs bg-gray-400 text-white px-2 py-0.5 rounded-full">Optional</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Apply CTA -->
+<section class="py-20 bg-alifTeal relative overflow-hidden" data-aos="fade-up">
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="absolute top-0 right-0 w-80 h-80 bg-alifGreen/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 left-0 w-60 h-60 bg-alifYellow/10 rounded-full blur-3xl"></div>
+  </div>
+  <div class="relative z-10 text-center px-6">
+    <h2 class="text-4xl md:text-5xl font-black text-white mb-4">Ready to Apply?</h2>
+    <p class="text-white/80 text-lg max-w-xl mx-auto mb-10">Take the first step towards your educational future. Fill out the application form and let ALIF support your academic journey.</p>
+    <a href="scholarship-form.html" class="inline-block bg-alifYellow text-alifTeal font-extrabold text-xl px-14 py-5 rounded-full shadow-2xl hover:scale-105 transition-all">APPLY NOW</a>
+    <p class="text-white/60 text-sm mt-4">Applications close when the cycle ends. Apply early.</p>
+  </div>
+</section>
+
+<!-- Past Beneficiaries -->
+<section class="py-20 bg-white" data-aos="fade-up">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="text-center mb-10">
+      <span class="inline-block rounded-full px-6 py-2 text-white font-extrabold text-xs uppercase bg-gradient-to-r from-alifYellow to-alifGreen mb-4">Alumni</span>
+      <h2 class="text-3xl md:text-4xl font-black text-alifTeal uppercase mb-4">List of Past Beneficiaries</h2>
+      <p class="text-textGray max-w-2xl mx-auto">These exceptional students have been supported by the ALIF Scholarship Programme. Their achievements inspire the next generation.</p>
+    </div>
+
+    <!-- Search -->
+    <div class="mb-6 flex gap-3">
+      <input id="beneficiary-search" type="text" placeholder="Search beneficiaries by name..." class="flex-1 border border-gray-200 rounded-full px-6 py-3 focus:outline-none focus:border-alifGreen focus:ring-1 focus:ring-alifGreen text-sm" oninput="searchBeneficiaries()">
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white rounded-3xl border border-[#E5F7EC] shadow-sm overflow-hidden">
+      <div id="beneficiary-loading" class="p-8 text-center text-textGray">Loading beneficiaries...</div>
+      <table id="beneficiary-table" class="w-full hidden">
+        <thead class="bg-alifTeal text-white">
+          <tr>
+            <th class="px-6 py-4 text-left font-semibold text-sm">#</th>
+            <th class="px-6 py-4 text-left font-semibold text-sm">Name</th>
+            <th class="px-6 py-4 text-left font-semibold text-sm">Institution</th>
+            <th class="px-6 py-4 text-left font-semibold text-sm">Department</th>
+            <th class="px-6 py-4 text-left font-semibold text-sm">Year</th>
+          </tr>
+        </thead>
+        <tbody id="beneficiary-tbody" class="divide-y divide-gray-100"></tbody>
+      </table>
+      <div id="beneficiary-empty" class="hidden p-8 text-center text-textGray">
+        <p class="text-lg">No beneficiaries found.</p>
+        <p class="text-sm mt-2">Beneficiary records will appear here once uploaded by the admin.</p>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div id="beneficiary-pagination" class="mt-6 flex justify-center gap-2"></div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-[#0D2C2B] text-white py-16">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div>
+        <img src="alif-logo.png" alt="ALIF Logo" class="mb-4 h-12">
+        <p class="text-sm mb-6">ALIF was officially inaugurated on November 17, 2012, with a sincere desire to benefit humanity.</p>
+        <div class="flex items-center">
+          <input type="email" placeholder="Email Address" class="w-full px-4 py-2 text-black rounded-l-md focus:outline-none">
+          <button class="bg-alifYellow text-black px-4 py-2 rounded-r-md font-bold">Subscribe</button>
+        </div>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Programs</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="scholarship.html" class="hover:text-alifYellow transition">Scholarship</a></li>
+          <li><a href="grant-for-artisans.html" class="hover:text-alifYellow transition">Grant for Artisans</a></li>
+          <li><a href="career-counseling.html" class="hover:text-alifYellow transition">Career Counseling</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="about.html" class="hover:text-alifYellow transition">About Us</a></li>
+          <li><a href="events.html" class="hover:text-alifYellow transition">Latest Events</a></li>
+          <li><a href="login.html" class="hover:text-alifYellow transition">Student Login</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="tel:+2348135283434" class="hover:text-alifYellow">(+234) 813 5283 434</a></li>
+          <li><a href="mailto:info@alikpeafoundation.org" class="hover:text-alifYellow">info@alikpeafoundation.org</a></li>
+          <li class="text-gray-400">True Vine Plaza, 66b Ujoelen Rd, Ekpoma, Edo State, NG</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 border-t border-white/20 pt-4 text-center text-sm text-gray-400">
+      <p>Copyright © 2026 AlikpeaFoundation. All rights reserved by Noahtech.</p>
+    </div>
+  </div>
+</footer>
+
+<button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-10 right-10 bg-alifYellow text-alifTeal p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+</button>
+
+<script src="config.js"></script>
+<script>
+  AOS.init({ once: true });
+  const API = window.API_BASE || '';
+  let currentPage = 1;
+
+  fetch(`${API}/api/content/news-ticker/active`).then(r=>r.json()).then(items=>{
+    if(items.length) document.getElementById('news-ticker-text').textContent='LATEST NEWS: '+items.map(i=>i.content).join(' • ')+' •';
+  }).catch(()=>{});
+
+  async function loadBeneficiaries(page=1, search='') {
+    try {
+      const res = await fetch(`${API}/api/content/beneficiaries?page=${page}&limit=20&search=${encodeURIComponent(search)}`);
+      const data = await res.json();
+      const tbody = document.getElementById('beneficiary-tbody');
+      const table = document.getElementById('beneficiary-table');
+      const loading = document.getElementById('beneficiary-loading');
+      const empty = document.getElementById('beneficiary-empty');
+      loading.classList.add('hidden');
+      if (!data.beneficiaries || data.beneficiaries.length === 0) {
+        table.classList.add('hidden');
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+      table.classList.remove('hidden');
+      const offset = (page - 1) * 20;
+      tbody.innerHTML = data.beneficiaries.map((b, i) => `
+        <tr class="hover:bg-[#F9FDF9] transition">
+          <td class="px-6 py-4 text-textGray text-sm">${offset + i + 1}</td>
+          <td class="px-6 py-4 text-alifTeal font-semibold">${b.name}</td>
+          <td class="px-6 py-4 text-textGray text-sm">${b.institution || '—'}</td>
+          <td class="px-6 py-4 text-textGray text-sm">${b.department || '—'}</td>
+          <td class="px-6 py-4 text-textGray text-sm">${b.year || '—'}</td>
+        </tr>
+      `).join('');
+      // Pagination
+      const pages = Math.ceil(data.total / 20);
+      const pagEl = document.getElementById('beneficiary-pagination');
+      pagEl.innerHTML = '';
+      for (let p = 1; p <= pages && p <= 10; p++) {
+        const btn = document.createElement('button');
+        btn.textContent = p;
+        btn.className = `w-10 h-10 rounded-full font-bold text-sm transition ${p===page ? 'bg-alifTeal text-white' : 'bg-gray-100 text-textGray hover:bg-alifGreen hover:text-white'}`;
+        btn.onclick = () => { currentPage = p; loadBeneficiaries(p, document.getElementById('beneficiary-search').value); };
+        pagEl.appendChild(btn);
+      }
+    } catch(e) {
+      document.getElementById('beneficiary-loading').textContent = 'Failed to load beneficiaries.';
+    }
+  }
+
+  let searchTimeout;
+  function searchBeneficiaries() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      currentPage = 1;
+      loadBeneficiaries(1, document.getElementById('beneficiary-search').value);
+    }, 400);
+  }
+
+  loadBeneficiaries();
+</script>
+</body>
+</html>
