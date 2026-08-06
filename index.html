@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>alikpeafoundation | Live Preview</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            alifTeal: '#194341',
+            alifYellow: '#FFCD28',
+            alifGreen: '#2CB770',
+            textGray: '#5F6973',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      background: linear-gradient(to bottom, #F0FDF4, #FFFFFF);
+    }
+    
+    /* The News Ticker (Moving Headline) */
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    .animate-marquee {
+      display: inline-block;
+      white-space: nowrap;
+      animation: marquee 25s linear infinite;
+    }
+    .animate-marquee:hover { animation-play-state: paused; }
+
+    /* The vertical line from your screenshot */
+    .vertical-guide {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 100%;
+      background-color: #f3f4f6;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body class="bg-white" onload="if(window.AOS){AOS.init({ once: true });}">
+
+  <div class="bg-alifTeal py-2 overflow-hidden border-b border-white/10">
+    <div class="animate-marquee text-white text-xs font-bold uppercase tracking-[0.2em]">
+      LATEST NEWS: ALIF Scholarship Application for 2026 now open • Chief (Dr.) Leemon A. Ikepa receives humanitarian award • Mentoring session scheduled for next week •
+    </div>
+  </div>
+
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm">
+    <div class="max-w-7xl mx-auto flex items-center justify-between py-4 px-6">
+      <img src="alif-logo.png" alt="ALIF Foundation Logo" class="h-12 w-auto" />
+      
+      <nav class="hidden md:flex flex-1 justify-center space-x-8">
+        <a href="index.html" class="text-textGray font-semibold hover:text-alifTeal transition">Home</a>
+        <a href="about.html" class="text-textGray font-semibold hover:text-alifTeal transition">About Us</a>
+        <div class="relative group">
+          <button class="text-textGray font-semibold hover:text-alifTeal transition flex items-center">
+            Programs
+            <svg class="ml-2 w-4 h-4 text-textGray" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div class="hidden group-hover:block absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+            <a href="grant-for-artisans.html" class="block px-4 py-2 text-textGray hover:bg-gray-50 hover:text-alifTeal">Grant for Artisans</a>
+            <a href="scholarship.html" class="block px-4 py-2 text-textGray hover:bg-gray-50 hover:text-alifTeal">Scholarship</a>
+            <a href="career-counseling.html" class="block px-4 py-2 text-textGray hover:bg-gray-50 hover:text-alifTeal">Career Counseling</a>
+          </div>
+        </div>
+        <a href="events.html" class="text-textGray font-semibold hover:text-alifTeal transition">Latest Events</a>
+        <a href="contact.html" class="text-textGray font-semibold hover:text-alifTeal transition">Contact</a>
+        <a href="scholarship-form.html" class="bg-alifYellow text-alifTeal font-extrabold px-6 py-2 rounded-full shadow-md hover:scale-105 transition-all ml-4">APPLICATION</a>
+      </nav>
+      
+      <!-- Mobile Menu Toggle Button -->
+      <button class="md:hidden flex items-center justify-center p-2" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+        <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+    <!-- Mobile Menu Dropdown -->
+    <div id="mobile-menu" class="md:hidden hidden bg-white w-full shadow-lg">
+      <div class="flex flex-col items-center py-4 space-y-4">
+        <a href="index.html" class="text-textGray font-semibold hover:text-alifTeal transition">Home</a>
+        <a href="about.html" class="text-textGray font-semibold hover:text-alifTeal transition">About Us</a>
+        <div class="relative group w-full flex flex-col items-center">
+          <button class="text-textGray font-semibold hover:text-alifTeal transition flex items-center w-full justify-center" onclick="document.getElementById('mobile-programs-dropdown').classList.toggle('hidden')">
+            Programs
+            <svg class="ml-2 w-4 h-4 text-textGray" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="mobile-programs-dropdown" class="hidden w-56 bg-white border border-gray-200 rounded-lg shadow-lg mt-2">
+            <a href="grant-for-artisans.html" class="block px-4 py-2 text-textGray hover:bg-gray-50 hover:text-alifTeal">Grant for Artisans</a>
+            <a href="scholarship.html" class="block px-4 py-2 text-textGray hover:bg-gray-50 hover:text-alifTeal">Scholarship</a>
+            <a href="career-counseling.html" class="block px-4 py-2 text-textGray hover:bg-gray-50 hover:text-alifTeal">Career Counseling</a>
+          </div>
+        </div>
+        <a href="events.html" class="text-textGray font-semibold hover:text-alifTeal transition">Latest Events</a>
+        <a href="contact.html" class="text-textGray font-semibold hover:text-alifTeal transition">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="relative w-screen min-h-screen">
+
+    <!-- 3D Leaf Green Background Effects -->
+    <div class="absolute inset-0 pointer-events-none z-0">
+      <!-- Large 3D Leaf Blob Top Left -->
+      <div class="hidden md:block absolute top-[-80px] left-[-120px] w-[340px] h-[340px] bg-gradient-to-br from-green-200 via-green-300 to-green-400 rounded-full blur-[90px] opacity-60 shadow-2xl" style="transform: rotate(-18deg) scale(1.1);"></div>
+      <!-- Medium 3D Leaf Blob Bottom Right -->
+      <div class="absolute bottom-[-100px] right-[-120px] w-[220px] h-[220px] bg-gradient-to-tr from-green-100 via-green-200 to-green-300 rounded-full blur-[70px] opacity-50 shadow-xl" style="transform: rotate(12deg) scale(1.05);"></div>
+      <!-- Small 3D Leaf Blob Center Left -->
+      <div class="absolute top-1/2 left-[-60px] w-[120px] h-[120px] bg-gradient-to-br from-green-50 via-green-100 to-green-200 rounded-full blur-[40px] opacity-40 shadow-lg" style="transform: translateY(-50%) scale(1);"></div>
+      <!-- Floating 3D Leaf Shape (SVG) -->
+      <svg class="absolute top-[30%] left-[60%] w-32 h-32 opacity-30" viewBox="0 0 100 100" fill="none">
+        <path d="M50 10C70 20 90 60 50 90C10 60 30 20 50 10Z" fill="url(#leafGradient)"/>
+        <defs>
+          <linearGradient id="leafGradient" x1="50" y1="10" x2="50" y2="90" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#A7F3D0" />
+            <stop offset="1" stop-color="#2CB770" />
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <!-- Hero Section Refactor -->
+    <section class="relative h-screen w-full">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="images/chief-ikpea.jpg" alt="Chief Ikpea" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-[#194341]/70"></div> <!-- Dark Teal Overlay -->
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-4">
+            <!-- Heading with different font for 'Welcome' -->
+            <h1 class="text-4xl md:text-6xl font-black uppercase flex flex-col items-center">
+              <span style="font-family: 'Poppins', Arial, sans-serif; font-size: 1.3em; color: #FFCD28; letter-spacing: 1px; text-shadow: 0 2px 12px #0007; font-style: italic; font-weight: 700;">Welcome</span>
+              <span style="font-family: 'Georgia', serif; letter-spacing: 2px; font-style: italic; color: #fff;">to Agbonjagwe Leemon Ikpea Foundation</span>
+            </h1>
+            <!-- Google Fonts for Poppins Italic -->
+            <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,700&display=swap" rel="stylesheet">
+
+            <!-- Mission Statement -->
+            <div class="mt-6 bg-white/30 backdrop-blur-md p-6 rounded-xl shadow-lg max-w-3xl">
+              <p class="text-base text-white text-left leading-relaxed">
+                ALIF is dedicated to empowering Nigeria's most vulnerable—providing scholarships for indigent students, supporting widows and the elderly, and offering free medical care to those in need. Since 2012, our mission has been to uplift lives through education, compassion, and community service. Together with our partners and volunteers, we strive to create lasting impact and brighter futures for all.
+              </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHAT WE ARE MADE OF Section -->
+    <section class="bg-white py-12">
+      <div class="flex flex-col items-center justify-center relative">
+        <!-- Navy Blue Dot -->
+        <div class="w-3 h-3 bg-[#1E3A8A] rounded-full absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+        <!-- Pill Badge -->
+        <div class="mt-8 mb-6 flex justify-center w-full">
+          <span class="inline-block rounded-full px-6 py-2 text-white font-extrabold text-xs uppercase bg-gradient-to-r from-[#FFCD28] to-[#2CB770] text-center">ALIF AT A GLANCE</span>
+        </div>
+        <!-- Main Heading -->
+        <h2 class="text-3xl md:text-4xl font-black text-[#194341] text-center mb-4 uppercase">WHo WE ARE </h2>
+        <!-- Intro Paragraph -->
+        <p class="text-[#5F6973] text-base md:text-lg text-center leading-relaxed mb-8 max-w-2xl">
+          Agbonjawe Leemon Ikepa Foundation (ALIF) was founded by Chief (Dr.) Leemon A. Ikpea FNSE, CON,JP, Group Chairman/CEO,Lee Enginering Group and Allied Companies Limited. ALIF was officially inaugurated on November 17, 2012 with sincere desire to benefit humanity through charitable activities which includes:
+        </p>
+        <!-- Golden Yellow Dot -->
+        <div class="w-3 h-3 bg-[#FFCD28] rounded-full mx-auto mb-8"></div>
+      </div>
+      <div class="max-w-4xl mx-auto flex flex-col items-center space-y-8">
+        <!-- Scholarship Card (was Grants / Rural Empowerments) -->
+        <div class="relative bg-white rounded-3xl shadow-[0_8px_32px_0_rgba(44,183,112,0.07)] px-8 py-8 flex flex-col items-start w-full">
+          <img src="images/scholarship.jpg" alt="ALIF Scholarship" class="w-full aspect-square object-cover rounded-3xl mb-6">
+          <div>
+            <h3 class="text-[#194341] font-bold text-lg mb-3">Scholarship</h3>
+          </div>
+        </div>
+        <!-- Scholarship Card -->
+        <div class="relative bg-white rounded-3xl shadow-[0_8px_32px_0_rgba(44,183,112,0.07)] px-8 py-8 flex items-start w-full">
+          <!-- Abstract Blob -->
+          <div class="absolute -top-8 -left-8 w-32 h-32 bg-[#F0FDF4] rounded-full blur-2xl opacity-80 -z-10"></div>
+          <!-- Icon Placeholder -->
+          <div class="w-6 h-20 border-l-2 border-[#A7F3D0] rounded-xl mr-6"></div>
+          <div>
+            <h3 class="text-[#194341] font-bold text-lg mb-3">Scholarship</h3>
+            <p id="scholarship-preview" class="text-[#5F6973] text-base leading-relaxed">
+              Extending scholarship scheme to indigent students and young persons of school age, especially orphans. Our scholarship scheme, which is the flagship of our program, runs through the six years of secondary school up to first degree level and is open to eligible indigent students in any public secondary and tertiary institution, polytechnic & college of education in Nigeria.
+            </p>
+            <div id="scholarship-details" class="hidden text-[#5F6973] text-base leading-relaxed mt-4">
+              <p>Beneficiaries of the scholarship program, apart from the financial assistance, also enjoy the following benefits:</p>
+              <ul class="list-disc list-inside mt-4 space-y-2 text-[#5F6973]">
+                <li>Periodic academic development and social events throughout the year</li>
+                <li>Supplementary tutoring and academic remediation where necessary</li>
+                <li>Access to a network of ALIF scholarship and foundation members</li>
+                <li>Career guidance and mentoring</li>
+              </ul>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <button id="scholarship-read-more" onclick="document.getElementById('scholarship-details').classList.remove('hidden'); this.classList.add('hidden'); document.getElementById('scholarship-read-less').classList.remove('hidden');" class="bg-[#FFF1F0] text-[#194341] font-bold px-5 py-2 rounded-full shadow-sm hover:bg-[#FFCD28]/10 transition">Read More</button>
+              <button id="scholarship-read-less" onclick="document.getElementById('scholarship-details').classList.add('hidden'); this.classList.add('hidden'); document.getElementById('scholarship-read-more').classList.remove('hidden');" class="hidden bg-[#FFF1F0] text-[#194341] font-bold px-5 py-2 rounded-full shadow-sm hover:bg-[#FFCD28]/10 transition">Read Less</button>
+            </div>
+          </div>
+        </div>
+        <!-- Youth & Community Card -->
+        <div class="relative bg-white rounded-3xl shadow-[0_8px_32px_0_rgba(44,183,112,0.07)] px-8 py-8 flex flex-col items-start w-full">
+          <img src="alif-community.jpg" alt="Youth and Community Development" class="w-full aspect-square object-cover rounded-3xl mb-6">
+          <div>
+            <h3 class="text-[#194341] font-bold text-lg mb-3">Youth and Community Dev.</h3>
+          </div>
+        </div>
+        <!-- Youth Development Card -->
+        <div class="relative bg-white rounded-3xl shadow-[0_8px_32px_0_rgba(44,183,112,0.07)] px-8 py-8 flex items-start w-full">
+          <div class="absolute -top-8 -left-8 w-32 h-32 bg-[#F0FDF4] rounded-full blur-2xl opacity-80 -z-10"></div>
+          <div class="w-6 h-20 border-l-2 border-[#A7F3D0] rounded-xl mr-6"></div>
+          <div>
+            <h3 class="text-[#194341] font-bold text-lg mb-3">Youth Development</h3>
+            <p id="youth-preview" class="text-[#5F6973] text-base leading-relaxed">
+              ALIF promotes youth employment through skills acquisition, small business support packs for artisans, as well as grassroots football development programs for rural youth who desire to take football as a career.
+            </p>
+            <div id="youth-details" class="hidden text-[#5F6973] text-base leading-relaxed mt-4">
+              <p>Grassroot Football means bringing together children and giving them access to football in their own environment, whatever age, gender, physical condition, religion, or ethnic group. At ALIF, we have adopted this means to curb youth restiveness. We had our test run during the first anniversary of ALIF, where we engaged youths in our communities in a football competition amongst the 5 Local Government Council Areas in Esan Land in Edo state.</p>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <button id="youth-read-more" onclick="document.getElementById('youth-details').classList.remove('hidden'); this.classList.add('hidden'); document.getElementById('youth-read-less').classList.remove('hidden');" class="bg-[#FFF1F0] text-[#194341] font-bold px-5 py-2 rounded-full shadow-sm hover:bg-[#FFCD28]/10 transition">Read More</button>
+              <button id="youth-read-less" onclick="document.getElementById('youth-details').classList.add('hidden'); this.classList.add('hidden'); document.getElementById('youth-read-more').classList.remove('hidden');" class="hidden bg-[#FFF1F0] text-[#194341] font-bold px-5 py-2 rounded-full shadow-sm hover:bg-[#FFCD28]/10 transition">Read Less</button>
+            </div>
+          </div>
+        </div>
+        <!-- Medical Services Card -->
+        <div class="relative bg-white rounded-3xl shadow-[0_8px_32px_0_rgba(44,183,112,0.07)] px-8 py-8 flex flex-col items-start w-full">
+          <img src="alif-medical.jpg" alt="ALIF Free Medical Services" class="w-full aspect-square object-cover rounded-3xl mb-6">
+          <div>
+            <h3 class="text-[#194341] font-bold text-lg mb-3">ALIF Free Medical Services</h3>
+          </div>
+        </div>
+        <!-- Rural Health Care Services Card -->
+        <div class="relative bg-white rounded-3xl shadow-[0_8px_32px_0_rgba(44,183,112,0.07)] px-8 py-8 flex items-start w-full">
+          <div class="absolute -top-8 -left-8 w-32 h-32 bg-[#F0FDF4] rounded-full blur-2xl opacity-80 -z-10"></div>
+          <div class="w-6 h-20 border-l-2 border-[#A7F3D0] rounded-xl mr-6"></div>
+          <div>
+            <h3 class="text-[#194341] font-bold text-lg mb-3">Rural Health Care Services</h3>
+            <p id="rural-preview" class="text-[#5F6973] text-base leading-relaxed">
+              ALIF facilitates easy access to primary health care services for people living in rural communities. We run regular medical outreaches and free screenings focused on prevention and early treatment of common illnesses.
+            </p>
+            <div id="rural-details" class="hidden text-[#5F6973] text-base leading-relaxed mt-4">
+              <p>Besides sponsoring several people for medical treatment both in Nigeria and abroad, ALIF addresses issues pertaining to good health and vitality through our medical outreaches where prevention of diet-related diseases as well as their management are taught by professionals drawn from relevant fields of medicine.</p>
+              <p class="mt-3">We conduct free medical screening for indigent members of our communities. They are majorly screened for:</p>
+              <ul class="list-disc list-inside mt-3 space-y-2 text-[#5F6973]">
+                <li>Skin diseases</li>
+                <li>Respiratory tract infections</li>
+                <li>Eye diseases</li>
+                <li>Malaria</li>
+                <li>HIV</li>
+                <li>Hepatitis</li>
+                <li>Diabetes</li>
+              </ul>
+              <p class="mt-3">Free drugs are usually distributed to participants and serious cases are followed up to ensure the individual gets proper medical attention at no cost to them. ALIF is currently building a 60-bed capacity health facility in Ewatto, Esan South East LGA of Nigeria.</p>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <button id="rural-read-more" onclick="document.getElementById('rural-details').classList.remove('hidden'); this.classList.add('hidden'); document.getElementById('rural-read-less').classList.remove('hidden');" class="bg-[#FFF1F0] text-[#194341] font-bold px-5 py-2 rounded-full shadow-sm hover:bg-[#FFCD28]/10 transition">Read More</button>
+              <button id="rural-read-less" onclick="document.getElementById('rural-details').classList.add('hidden'); this.classList.add('hidden'); document.getElementById('rural-read-more').classList.remove('hidden');" class="hidden bg-[#FFF1F0] text-[#194341] font-bold px-5 py-2 rounded-full shadow-sm hover:bg-[#FFCD28]/10 transition">Read Less</button>
+            </div>
+          </div>
+        </div>
+        <!-- Grant for Artisans Image Card -->
+        <div class="relative bg-white rounded-3xl shadow-[0_8px_32px_0_rgba(44,183,112,0.07)] px-8 py-8 flex flex-col items-start w-full">
+          <img src="images/grant-artisans.jpg" alt="ALIF Grant for Artisans" class="w-full aspect-square object-cover rounded-3xl mb-6">
+          <div>
+            <h3 class="text-[#194341] font-bold text-lg mb-3">Grant for Artisans</h3>
+          </div>
+        </div>
+        <!-- Grant for Artisans Card -->
+        <div class="relative bg-white rounded-3xl shadow-[0_8px_32px_0_rgba(44,183,112,0.07)] px-8 py-8 flex items-start w-full">
+          <div class="absolute -top-8 -left-8 w-32 h-32 bg-[#F0FDF4] rounded-full blur-2xl opacity-80 -z-10"></div>
+          <div class="w-6 h-20 border-l-2 border-[#A7F3D0] rounded-xl mr-6"></div>
+          <div>
+            <h3 class="text-[#194341] font-bold text-lg mb-3">Grant for Artisans</h3>
+            <p id="grant-preview" class="text-[#5F6973] text-base leading-relaxed">ALIF supports artisans and small business owners with grant packages that include tools, materials, and training to strengthen rural enterprise and increase household income.</p>
+            <div id="grant-details" class="hidden text-[#5F6973] text-base leading-relaxed mt-4">
+              <p>Our grant program provides eligible artisans with starter kits, equipment, and targeted training to scale their craft. We also offer mentorship, business guidance, and market linkage support so beneficiaries can grow sustainable livelihoods.</p>
+              <p class="mt-3">The program is designed to empower creative tradesmen, encourage self-reliance, and build economic resilience in underserved communities. Follow-up visits and impact monitoring help ensure grants translate into lasting improvements.</p>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <button id="grant-read-more" onclick="document.getElementById('grant-details').classList.remove('hidden'); this.classList.add('hidden'); document.getElementById('grant-read-less').classList.remove('hidden');" class="bg-[#FFF1F0] text-[#194341] font-bold px-5 py-2 rounded-full shadow-sm hover:bg-[#FFCD28]/10 transition">Read More</button>
+              <button id="grant-read-less" onclick="document.getElementById('grant-details').classList.add('hidden'); this.classList.add('hidden'); document.getElementById('grant-read-more').classList.remove('hidden');" class="hidden bg-[#FFF1F0] text-[#194341] font-bold px-5 py-2 rounded-full shadow-sm hover:bg-[#FFCD28]/10 transition">Read Less</button>
+            </div>
+          </div>
+        </div>
+        <!-- Mentoring Program Image Card -->
+        <div class="relative bg-white rounded-3xl shadow-[0_8px_32px_0_rgba(44,183,112,0.07)] px-8 py-8 flex flex-col items-start w-full">
+          <img src="images/mentoring-program.jpg" alt="ALIF Mentoring Program" class="w-full aspect-square object-cover rounded-3xl mb-6">
+          <div>
+            <h3 class="text-[#194341] font-bold text-lg mb-3">Mentoring Program</h3>
+          </div>
+        </div>
+        <!-- Mentoring Program Card -->
+        <div class="relative bg-white rounded-3xl shadow-[0_8px_32px_0_rgba(44,183,112,0.07)] px-8 py-8 flex items-start w-full">
+          <div class="absolute -top-8 -left-8 w-32 h-32 bg-[#F0FDF4] rounded-full blur-2xl opacity-80 -z-10"></div>
+          <div class="w-6 h-20 border-l-2 border-[#A7F3D0] rounded-xl mr-6"></div>
+          <div>
+            <h3 class="text-[#194341] font-bold text-lg mb-3">Mentoring Program</h3>
+            <p id="mentor-preview" class="text-[#5F6973] text-base leading-relaxed">ALIF provides mentoring programs that connect young people with experienced professionals, helping them build confidence, career direction, and practical skills.</p>
+            <div id="mentor-details" class="hidden text-[#5F6973] text-base leading-relaxed mt-4">
+              <p>Through workshops, coaching sessions, and community gatherings, our mentors teach goal-setting, leadership, and resilience. Participants receive personalised guidance to help them navigate education, entrepreneurship, and employment pathways.</p>
+              <p class="mt-3">The mentoring program empowers youth and vulnerable adults to make better decisions, seize opportunities, and contribute positively to their communities.</p>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <button id="mentor-read-more" onclick="document.getElementById('mentor-details').classList.remove('hidden'); this.classList.add('hidden'); document.getElementById('mentor-read-less').classList.remove('hidden');" class="bg-[#FFF1F0] text-[#194341] font-bold px-5 py-2 rounded-full shadow-sm hover:bg-[#FFCD28]/10 transition">Read More</button>
+              <button id="mentor-read-less" onclick="document.getElementById('mentor-details').classList.add('hidden'); this.classList.add('hidden'); document.getElementById('mentor-read-more').classList.remove('hidden');" class="hidden bg-[#FFF1F0] text-[#194341] font-bold px-5 py-2 rounded-full shadow-sm hover:bg-[#FFCD28]/10 transition">Read Less</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scholarship Detail Section -->
+    <section class="max-w-5xl w-full mx-auto px-4 py-20 flex flex-col items-center bg-white">
+      <div class="mb-8 flex justify-center w-full">
+        <span class="inline-block rounded-full px-6 py-2 text-white font-extrabold text-xs uppercase bg-gradient-to-r from-[#FFCD28] to-[#2CB770] text-center">OUR VALUE</span>
+      </div>
+      <p class="text-center text-[#5F6973] max-w-3xl mx-auto mb-8">The core values of ALIF are captured by the acronym C.R.E.D.I.T. These values form the foundation of our work, guiding every program, outreach, and support service we deliver to our nation’s most vulnerable people.</p>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10 w-full">
+        <div class="bg-white rounded-3xl border border-[#E5F7EC] p-8 shadow-[0_15px_40px_rgba(44,183,112,0.08)]">
+          <div class="space-y-5">
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-11 h-11 rounded-full bg-[#FFCD28] grid place-items-center text-[#194341] font-black text-lg">C</div>
+              <div>
+                <p class="font-semibold text-[#194341] mb-1">Courage</p>
+                <p class="text-[#5F6973] leading-relaxed">Standing strong for vulnerable communities and taking bold action in service of others.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-11 h-11 rounded-full bg-[#FFCD28] grid place-items-center text-[#194341] font-black text-lg">R</div>
+              <div>
+                <p class="font-semibold text-[#194341] mb-1">Responsibility</p>
+                <p class="text-[#5F6973] leading-relaxed">Taking ownership of our commitments and delivering meaningful impact with integrity.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-11 h-11 rounded-full bg-[#FFCD28] grid place-items-center text-[#194341] font-black text-lg">E</div>
+              <div>
+                <p class="font-semibold text-[#194341] mb-1">Empathy</p>
+                <p class="text-[#5F6973] leading-relaxed">Listening deeply to the needs of the less privileged and responding with care.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-11 h-11 rounded-full bg-[#FFCD28] grid place-items-center text-[#194341] font-black text-lg">D</div>
+              <div>
+                <p class="font-semibold text-[#194341] mb-1">Determination</p>
+                <p class="text-[#5F6973] leading-relaxed">Persisting through challenges to create access to education, health, and opportunity.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-11 h-11 rounded-full bg-[#FFCD28] grid place-items-center text-[#194341] font-black text-lg">I</div>
+              <div>
+                <p class="font-semibold text-[#194341] mb-1">Integrity</p>
+                <p class="text-[#5F6973] leading-relaxed">Operating transparently and honourably in every program we deliver.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-11 h-11 rounded-full bg-[#FFCD28] grid place-items-center text-[#194341] font-black text-lg">T</div>
+              <div>
+                <p class="font-semibold text-[#194341] mb-1">Tolerance</p>
+                <p class="text-[#5F6973] leading-relaxed">Respecting every life and promoting inclusion across our communities.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div class="bg-[#F9FDF9] border border-[#D1F7DE] rounded-3xl p-8 shadow-[0_15px_40px_rgba(44,183,112,0.06)]">
+            <h3 class="text-2xl font-black text-[#194341] mb-4 uppercase">OUR MISSION</h3>
+            <p class="text-[#5F6973] text-base md:text-lg leading-relaxed">To provide access to functional education, skills development and health care for the less privileged individuals in our society.</p>
+          </div>
+          <div class="bg-[#F9FDF9] border border-[#D1F7DE] rounded-3xl p-8 shadow-[0_15px_40px_rgba(44,183,112,0.06)]">
+            <h3 class="text-2xl font-black text-[#194341] mb-4 uppercase">OUR VISION</h3>
+            <p class="text-[#5F6973] text-base md:text-lg leading-relaxed">To become the most dependable and available platform for less privileged persons to attain a life of meaning and worth.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEAM MEMBERS & BOARD OF TRUSTEES Section -->
+    <section class="bg-white py-10 relative">
+      <!-- Navy Blue Dot (top right) -->
+      <div class="w-4 h-4 bg-[#1E3A8A] rounded-full absolute right-10 top-0 md:right-24 md:top-4"></div>
+      <!-- Brown Dot (far right, lower) -->
+      <div class="w-4 h-4 bg-[#8B5E3C] rounded-full absolute right-0 top-32 md:right-10 md:top-40"></div>
+      <div class="flex flex-col items-center justify-center mb-10 mt-16">
+        <!-- Pill Badge -->
+        <div class="mb-8 flex justify-center w-full">
+          <span class="inline-block rounded-full px-6 py-2 text-white font-extrabold text-xs uppercase bg-gradient-to-r from-[#FFCD28] to-[#2CB770] text-center">TEAM MEMBERS</span>
+        </div>
+        <!-- Main Heading -->
+      <div class="max-w-4xl mx-auto mb-8 px-8">
+        <div class="bg-[#F9FDF9] border border-[#D1F7DE] rounded-3xl p-8 text-[#5F6973] shadow-[0_15px_40px_rgba(44,183,112,0.06)]">
+          <p class="text-base md:text-lg leading-relaxed">
+            The management of ALIF is spearheaded by a team of dedicated and visionary leaders. At the helm of the foundation's establishment is its founder, <strong><em>Chief (Dr.) Leemon A. Ikepa</em></strong>, a successful business tycoon, renowned philanthropist and humanitarian.
+          </p>
+          <div id="team-details" class="hidden text-base md:text-lg leading-relaxed mt-4">
+            <p>The Board of Trustees, comprising distinguished individuals, provides strategic guidance and oversight. Notably, <strong><em>Rt. Hon. Matthew Egbadon</em></strong>, former speaker Edo state House of Assembly, Principal Partner at Highfliers Solicitors and a respected member of the board, brings his wealth of expertise to the table.</p>
+            <p class="mt-4">The day-to-day operations of ALIF are piloted by its Executive Director, <strong><em>Dr Difference Irabor</em></strong>, a former Banking Executive at Fidelity Bank, who holds a Master of Business Administration; is a Fellow of the Chartered Institute of Human Resource Management (CIHRM); a Chartered Human Resource Business Partner (Ch.HRBP); and is currently undergoing a <em>Certified Career Analyst (CCA)</em> course at Edumilstone, Bangalore, India. Since the Foundation's inception, Dr. Irabor has demonstrated exceptional leadership, driving ALIF's mission forward with passion and dedication.</p>
+            <p class="mt-4">Together, this leadership team has positioned ALIF for impactful service, driving positive change and making a lasting difference in the lives of those they serve.</p>
+          </div>
+          <div class="mt-6 flex flex-wrap gap-3 justify-center">
+            <button id="team-read-more" class="bg-[#FFF1F0] text-[#194341] font-bold px-5 py-2 rounded-full shadow-sm hover:bg-[#FFCD28]/10 transition">Read More</button>
+            <button id="team-read-less" class="hidden bg-[#FFF1F0] text-[#194341] font-bold px-5 py-2 rounded-full shadow-sm hover:bg-[#FFCD28]/10 transition">Read Less</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Final Team Member Grid Section -->
+    <section class="bg-white py-10 relative">
+      <!-- Faint Vertical Center Line -->
+      <div class="absolute left-1/2 top-0 h-full w-px bg-gray-200 opacity-30 z-0"></div>
+      <!-- Navy Blue Dot (right of cards) -->
+      <div class="w-3 h-3 bg-[#1E3A8A] rounded-full absolute right-0 top-24 md:right-10 md:top-32"></div>
+      <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+        <!-- Member 1 -->
+        <div class="bg-[#F0FDF4] border border-[#A7F3D0] rounded-3xl overflow-hidden flex flex-col items-center shadow-sm relative">
+          <div class="w-full h-64 flex items-center justify-center overflow-hidden">
+            <img src="member1.jpg" alt="Chief (Dr.) Leemon A. Ikepa" class="w-full h-full object-cover" />
+          </div>
+          <div class="py-6 px-4 w-full flex flex-col items-start relative">
+            <h3 class="text-[#194341] font-bold text-lg mb-2">Chief (Dr.) Leemon A. Ikepa FNSE, CON, JP</h3>
+            <p class="text-[#5F6973] text-sm mb-2">Group Chairman/CEO, Lee Engineering Group and Applied Companies Limited</p>
+            <button class="absolute bottom-4 right-4 bg-[#194341] w-8 h-8 flex items-center justify-center rounded-md">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <!-- Member 2 -->
+        <div class="bg-[#F0FDF4] border border-[#A7F3D0] rounded-3xl overflow-hidden flex flex-col items-center shadow-sm relative">
+          <div class="w-full h-64 flex items-center justify-center overflow-hidden">
+            <img src="member2.jpg" alt="Rt Hon. Matthew Egbadon" class="w-full h-full object-cover" />
+          </div>
+          <div class="py-6 px-4 w-full flex flex-col items-start relative">
+            <h3 class="text-[#194341] font-bold text-lg mb-2">Rt Hon. Matthew Egbadon</h3>
+            <p class="text-[#5F6973] text-sm mb-2">Member, ALIF Board of Trustees</p>
+            <button class="absolute bottom-4 right-4 bg-[#194341] w-8 h-8 flex items-center justify-center rounded-md">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <!-- Member 3 -->
+        <div class="bg-[#F0FDF4] border border-[#A7F3D0] rounded-3xl overflow-hidden flex flex-col items-center shadow-sm relative">
+          <div class="w-full h-64 flex items-center justify-center overflow-hidden">
+            <img src="member3.jpg" alt="Dr. Difference Irabor" class="w-full h-full object-cover" />
+          </div>
+          <div class="py-6 px-4 w-full flex flex-col items-start relative">
+            <h3 class="text-[#194341] font-bold text-lg mb-2">Dr. Difference Irabor</h3>
+            <p class="text-[#5F6973] text-sm mb-2">BSc, MBA, FCIHRM, Ch.HRBP</p>
+            <button class="absolute bottom-4 right-4 bg-[#194341] w-8 h-8 flex items-center justify-center rounded-md">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALIF Cheque Presentation Section -->
+    <section class="bg-white py-16 relative">
+      <!-- Faint Vertical Center Line -->
+      <div class="absolute left-1/2 top-0 h-full w-px bg-gray-200 opacity-30 z-0"></div>
+      <div class="max-w-3xl mx-auto flex flex-col items-center mb-12">
+        <h2 class="text-2xl md:text-3xl font-bold text-[#194341] text-center mb-8">ALIF Cheque presentation at UNIBEN</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+          <!-- Image Box 1 -->
+          <div class="bg-[#F0FDF4] border border-[#A7F3D0] rounded-lg overflow-hidden flex items-center justify-center shadow-md">
+            <img src="cheque1.jpg" alt="Cheque Presentation 1" class="w-full h-64 object-cover" />
+          </div>
+          <!-- Image Box 2 -->
+          <div class="bg-[#F0FDF4] border border-[#A7F3D0] rounded-lg overflow-hidden flex items-center justify-center shadow-md">
+            <img src="cheque2.jpg" alt="Cheque Presentation 2" class="w-full h-64 object-cover" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Latest Events (Read From Us) Section -->
+    <section class="bg-white py-16 relative">
+      <!-- Faint Vertical Center Line -->
+      <div class="absolute left-1/2 top-0 h-full w-px bg-gray-200 opacity-30 z-0"></div>
+      <div class="flex flex-col items-center justify-center mb-12 mt-16 relative">
+        <!-- Navy Blue Dot (right) -->
+        <div class="w-3 h-3 bg-[#1E3A8A] rounded-full absolute right-0 top-4 md:right-10 md:top-8"></div>
+        <!-- Pill Badge -->
+        <div class="mb-8 flex justify-center w-full">
+          <span class="inline-block rounded-full px-6 py-2 text-white font-extrabold text-xs uppercase bg-gradient-to-r from-[#FFCD28] to-[#2CB770] text-center">READ FROM US</span>
+        </div>
+        <!-- Main Heading -->
+        <h2 class="text-3xl md:text-4xl font-black text-[#194341] text-center mb-4 uppercase">Latest Events At ALIF</h2>
+        <!-- Intro Paragraph -->
+        <p class="text-[#5F6973] text-base md:text-lg text-center leading-relaxed mb-8 max-w-2xl">
+          To qualify for ALIF grants, you must have attended ALIF mentoring sessions where your needs are analyzed and recommendation made to ALIF Board of Trustees.
+        </p>
+      </div>
+      <!-- Event/Blog Cards Grid (populated from API) -->
+      <div class="max-w-4xl mx-auto latest-events-container grid grid-cols-1 gap-6"></div>
+    </section>
+    </section>
+
+    <!-- Get In Touch Contact Section -->
+    <section class="bg-white py-16">
+      <div class="max-w-2xl mx-auto flex flex-col items-center">
+        <h2 class="text-3xl md:text-4xl font-black text-black text-center mb-10">Get In Touch</h2>
+        <form class="w-full space-y-8">
+          <!-- Name -->
+          <div>
+            <label class="block text-[#5F6973] font-medium mb-2">Name*</label>
+            <input type="text" class="w-full bg-transparent border-none focus:outline-none text-black text-base" />
+            <div class="w-full h-px bg-gray-300 mt-1"></div>
+          </div>
+          <!-- Phone No -->
+          <div>
+            <label class="block text-[#5F6973] font-medium mb-2">Phone No*</label>
+            <input type="text" class="w-full bg-transparent border-none focus:outline-none text-black text-base" />
+            <div class="w-full h-px bg-gray-300 mt-1"></div>
+          </div>
+          <!-- Email Address -->
+          <div>
+            <label class="block text-[#5F6973] font-medium mb-2">Email Address*</label>
+            <input type="email" class="w-full bg-transparent border-none focus:outline-none text-black text-base" />
+            <div class="w-full h-px bg-gray-300 mt-1"></div>
+          </div>
+          <!-- Subject -->
+          <div>
+            <label class="block text-[#5F6973] font-medium mb-2">Subject*</label>
+            <input type="text" class="w-full bg-transparent border-none focus:outline-none text-black text-base" />
+            <div class="w-full h-px bg-gray-300 mt-1"></div>
+          </div>
+          <!-- Text Here -->
+          <div>
+            <label class="block text-[#5F6973] font-medium mb-2">Text Here</label>
+            <textarea class="w-full bg-transparent border-none focus:outline-none text-black text-base resize-none" rows="4"></textarea>
+            <div class="w-full h-px bg-gray-300 mt-1"></div>
+          </div>
+          <!-- Submit Button -->
+          <div class="flex justify-end">
+            <button type="submit" class="bg-[#194341] text-white font-bold px-6 py-2 rounded-md shadow-md hover:bg-[#2CB770] transition">Send Message</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Map & Location Section -->
+    </section>
+      <section class="relative max-w-7xl mx-auto py-12 px-6">
+        <div class="relative rounded-3xl overflow-hidden shadow-md" data-aos="zoom-in">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.835434509364!2d-122.419415484681!3d37.77492977975992!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064f0f0f0f%3A0x0!2zMzfCsDQ2JzMwLjgiTiAxMjLCsDI1JzEwLjgiVw!5e0!3m2!1sen!2sus!4v1610000000000!5m2!1sen!2sus" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+          <span class="floating-badge">Visit Our HQ</span>
+        </div>
+      </section>
+    <script>if(window.AOS){AOS.init({ once: true });}</script>
+
+
+    <!-- Floating Back to Top Button -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'});" class="fixed bottom-10 right-10 bg-[#FFCD28] text-[#194341] p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+      </svg>
+    </button>
+  </main>
+
+
+  <footer class="bg-[#0D2C2B] text-white py-16">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+        <!-- Column 1: Brand & Mission -->
+        <div>
+          <img src="alif-logo.png" alt="ALIF Logo" class="mb-4">
+          <p class="text-sm mb-6">ALIF was officially inaugurated on November 17, 2012, with a sincere desire to benefit humanity through structured charitable activities.</p>
+          <div class="flex items-center">
+            <input type="email" placeholder="Email Address" class="w-full px-4 py-2 text-black rounded-l-md focus:outline-none">
+            <button class="bg-[#FFCD28] text-black px-4 py-2 rounded-r-md">Subscribe</button>
+          </div>
+        </div>
+
+        <!-- Column 2: Quick Links (Programs) -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Impact Areas</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="hover:text-[#FFCD28] transition">Application</a></li>
+            <li><a href="#" class="hover:text-[#FFCD28] transition">Football</a></li>
+            <li><a href="#" class="hover:text-[#FFCD28] transition">School Outreach</a></li>
+            <li><a href="#" class="hover:text-[#FFCD28] transition">Medical Outreach</a></li>
+            <li><a href="#" class="hover:text-[#FFCD28] transition">PhotoSpeaks</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Scholarship Tracks -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Educational Support</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="hover:text-[#FFCD28] transition">Secondary</a></li>
+            <li><a href="#" class="hover:text-[#FFCD28] transition">College of Education</a></li>
+            <li><a href="#" class="hover:text-[#FFCD28] transition">Polytechnic</a></li>
+            <li><a href="#" class="hover:text-[#FFCD28] transition">University</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Connect -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+          <ul class="space-y-2">
+            <li><a href="tel:+2348135283434" class="hover:text-[#FFCD28] transition">(+234) 813 5283 434</a></li>
+            <li><a href="mailto:info@alikpeafoundation.org" class="hover:text-[#FFCD28] transition">info@alikpeafoundation.org</a></li>
+            <li>True Vine Plaza, 66b Ujoelen Road, Ekpoma, Edo State, NG</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Social Icons -->
+      <div class="flex justify-center space-x-4 mt-12">
+        <a href="#" class="bg-white bg-opacity-10 p-2 rounded-full hover:bg-opacity-20 transition">
+          <img src="facebook-icon.png" alt="Facebook" class="w-6 h-6">
+        </a>
+        <a href="#" class="bg-white bg-opacity-10 p-2 rounded-full hover:bg-opacity-20 transition">
+          <img src="twitter-icon.png" alt="Twitter" class="w-6 h-6">
+        </a>
+        <a href="#" class="bg-white bg-opacity-10 p-2 rounded-full hover:bg-opacity-20 transition">
+          <img src="instagram-icon.png" alt="Instagram" class="w-6 h-6">
+        </a>
+        <a href="#" class="bg-white bg-opacity-10 p-2 rounded-full hover:bg-opacity-20 transition">
+          <img src="pintrest-icon.png" alt="Pinterest" class="w-6 h-6">
+        </a>
+        <a href="#" class="bg-white bg-opacity-10 p-2 rounded-full hover:bg-opacity-20 transition">
+          <img src="youtube-icon.png" alt="YouTube" class="w-6 h-6">
+        </a>
+      </div>
+
+      <!-- Copyright Bar -->
+      <div class="mt-12 border-t border-white border-opacity-20 pt-4 text-center text-sm">
+        <p>Copyright © 2026 AlikpeaFoundation. All rights reserved by Noahtech.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="config.js"></script>
+  <script>
+    // Load dynamic content when page loads
+    // Compatibility alias for older files
+    const API_BASE_URL = window.API_BASE || window.API_BASE_URL || '';
+    document.addEventListener('DOMContentLoaded', function() {
+      loadNewsTicker();
+      loadTestimonials();
+      loadLatestNews();
+      setupScholarshipReadMore();
+      setupYouthReadMore();
+      setupGrantReadMore();
+      setupMentorReadMore();
+      setupTeamReadMore();
+    });
+
+    // Load news ticker content
+    async function loadNewsTicker() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/content/news-ticker/active`);
+        const tickerItems = await response.json();
+
+        if (tickerItems.length > 0) {
+          const tickerContent = tickerItems.map(item => item.content).join(' • ');
+          const tickerElement = document.querySelector('.animate-marquee');
+          if (tickerElement) {
+            tickerElement.textContent = `LATEST NEWS: ${tickerContent}`;
+          }
+        }
+      } catch (error) {
+        console.error('Error loading news ticker:', error);
+      }
+    }
+
+    // Load testimonials
+    async function loadTestimonials() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/content/posts/category/testimonials?limit=3`);
+        const testimonials = await response.json();
+
+        // Update testimonials section if it exists
+        const testimonialContainer = document.querySelector('.testimonials-container');
+        if (testimonialContainer && testimonials.length > 0) {
+          testimonialContainer.innerHTML = testimonials.map(testimonial => `
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <p class="text-gray-700 mb-4">"${testimonial.content}"</p>
+              <p class="font-semibold text-alifTeal">- ${testimonial.title}</p>
+            </div>
+          `).join('');
+        }
+      } catch (error) {
+        console.error('Error loading testimonials:', error);
+      }
+    }
+
+    // Load latest news and events
+    async function loadLatestNews() {
+      try {
+        // existing news posts
+        const response = await fetch(`${API_BASE_URL}/content/posts/category/news?limit=3`);
+        const newsItems = await response.json();
+
+        // Update latest news section if it exists
+        const newsContainer = document.querySelector('.latest-news-container');
+        if (newsContainer && newsItems.length > 0) {
+          newsContainer.innerHTML = newsItems.map(news => `
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <h3 class="text-lg font-semibold text-alifTeal mb-2">${news.title}</h3>
+              <p class="text-gray-700 mb-4">${news.excerpt || news.content.substring(0, 150)}...</p>
+              <p class="text-sm text-gray-500">${new Date(news.created_at).toLocaleDateString()}</p>
+            </div>
+          `).join('');
+        }
+
+        // Fetch events and render the latest event into the latest-events-container
+        try {
+          const evRes = await fetch(`${API_BASE_URL}/events`);
+          const evItems = await evRes.json();
+          const eventsContainer = document.querySelector('.latest-events-container');
+          if (eventsContainer && Array.isArray(evItems) && evItems.length > 0) {
+            // sort by id desc (newest first)
+            evItems.sort((a,b) => (b.id || 0) - (a.id || 0));
+            const ev = evItems[0];
+            const snippet = ev.description ? (ev.description.length > 180 ? ev.description.substring(0,180) + '...' : ev.description) : '';
+            eventsContainer.innerHTML = `
+              <div class="bg-white rounded-3xl shadow-md p-6 md:flex md:gap-6 items-start">
+                ${ev.image_url ? `<div class="md:w-1/3 mb-4 md:mb-0"><img src="${ev.image_url}" class="w-full h-48 object-cover rounded-lg" /></div>` : ''}
+                <div class="flex-1">
+                  <h3 class="text-xl font-bold text-[#194341] mb-2">${ev.name}</h3>
+                  <p class="text-[#5F6973] mb-3">${snippet}</p>
+                  <a href="event.html?id=${ev.id}" class="bg-[#FFF1F0] text-[#FFCD28] font-bold px-4 py-2 rounded-full shadow-sm hover:bg-[#FFCD28]/10">Read More</a>
+                </div>
+              </div>
+            `;
+          }
+        } catch (err) {
+          console.error('Error loading events:', err);
+        }
+
+      } catch (error) {
+        console.error('Error loading latest news:', error);
+      }
+    }
+
+    function setupScholarshipReadMore() {
+      const readMoreBtn = document.getElementById('scholarship-read-more');
+      const readLessBtn = document.getElementById('scholarship-read-less');
+      const details = document.getElementById('scholarship-details');
+
+      if (!readMoreBtn || !readLessBtn || !details) return;
+
+      readMoreBtn.addEventListener('click', () => {
+        details.classList.remove('hidden');
+        readMoreBtn.classList.add('hidden');
+        readLessBtn.classList.remove('hidden');
+      });
+
+      readLessBtn.addEventListener('click', () => {
+        details.classList.add('hidden');
+        readMoreBtn.classList.remove('hidden');
+        readLessBtn.classList.add('hidden');
+      });
+    }
+
+    function setupYouthReadMore() {
+      const readMoreBtn = document.getElementById('youth-read-more');
+      const readLessBtn = document.getElementById('youth-read-less');
+      const details = document.getElementById('youth-details');
+
+      if (!readMoreBtn || !readLessBtn || !details) return;
+
+      readMoreBtn.addEventListener('click', () => {
+        details.classList.remove('hidden');
+        readMoreBtn.classList.add('hidden');
+        readLessBtn.classList.remove('hidden');
+      });
+
+      readLessBtn.addEventListener('click', () => {
+        details.classList.add('hidden');
+        readMoreBtn.classList.remove('hidden');
+        readLessBtn.classList.add('hidden');
+      });
+    }
+
+    function setupGrantReadMore() {
+      const readMoreBtn = document.getElementById('grant-read-more');
+      const readLessBtn = document.getElementById('grant-read-less');
+      const details = document.getElementById('grant-details');
+
+      if (!readMoreBtn || !readLessBtn || !details) return;
+
+      readMoreBtn.addEventListener('click', () => {
+        details.classList.remove('hidden');
+        readMoreBtn.classList.add('hidden');
+        readLessBtn.classList.remove('hidden');
+      });
+
+      readLessBtn.addEventListener('click', () => {
+        details.classList.add('hidden');
+        readMoreBtn.classList.remove('hidden');
+        readLessBtn.classList.add('hidden');
+      });
+    }
+
+    function setupMentorReadMore() {
+      const readMoreBtn = document.getElementById('mentor-read-more');
+      const readLessBtn = document.getElementById('mentor-read-less');
+      const details = document.getElementById('mentor-details');
+
+      if (!readMoreBtn || !readLessBtn || !details) return;
+
+      readMoreBtn.addEventListener('click', () => {
+        details.classList.remove('hidden');
+        readMoreBtn.classList.add('hidden');
+        readLessBtn.classList.remove('hidden');
+      });
+
+      readLessBtn.addEventListener('click', () => {
+        details.classList.add('hidden');
+        readMoreBtn.classList.remove('hidden');
+        readLessBtn.classList.add('hidden');
+      });
+    }
+
+    function setupTeamReadMore() {
+      const readMoreBtn = document.getElementById('team-read-more');
+      const readLessBtn = document.getElementById('team-read-less');
+      const details = document.getElementById('team-details');
+
+      if (!readMoreBtn || !readLessBtn || !details) return;
+
+      readMoreBtn.addEventListener('click', () => {
+        details.classList.remove('hidden');
+        readMoreBtn.classList.add('hidden');
+        readLessBtn.classList.remove('hidden');
+      });
+
+      readLessBtn.addEventListener('click', () => {
+        details.classList.add('hidden');
+        readMoreBtn.classList.remove('hidden');
+        readLessBtn.classList.add('hidden');
+      });
+    }
+  </script>
+</body>
+</html>
+
+
+
+

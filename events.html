@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest Events & Impact - ALIF Foundation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            alifTeal: '#194341',
+                            alifYellow: '#FFCD28',
+                            alifGreen: '#2CB770',
+                            textGray: '#5F6973',
+                        }
+                    }
+                }
+            }
+        </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <script src="config.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hover-arrow::after {
+            content: ' \2192';
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateX(-5px);
+        }
+        .hover-arrow:hover::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        /* The News Ticker (Moving Headline) */
+        @keyframes marquee {
+          0% { transform: translateX(100%); }
+          100% { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+          display: inline-block;
+          white-space: nowrap;
+          animation: marquee 25s linear infinite;
+        }
+        .animate-marquee:hover { animation-play-state: paused; }
+    </style>
+</head>
+<body class="bg-white">
+    <div class="bg-alifTeal py-2 overflow-hidden border-b border-white/10">
+        <div class="animate-marquee text-white text-xs font-bold uppercase tracking-[0.2em]">
+            LATEST NEWS: ALIF Scholarship Application for 2026 now open • Chief Dr. Leemon Ikpea receives humanitarian award • Mentoring session scheduled for next week •
+        </div>
+    </div>
+ <!-- Navbar -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm">
+    <div class="max-w-7xl mx-auto flex items-center justify-between py-4 px-6">
+      <img src="alif-logo.png" alt="ALIF Foundation Logo" class="h-12 w-auto" />
+      
+      <nav class="hidden md:flex flex-1 justify-center space-x-8">
+                <a href="index.html" class="text-textGray font-semibold hover:text-alifTeal transition">Home</a>
+                <a href="about.html" class="text-textGray font-semibold hover:text-alifTeal transition">About Us</a>
+                <div class="relative group">
+                    <button class="text-textGray font-semibold hover:text-alifTeal transition flex items-center">
+                        Programs
+                        <svg class="ml-2 w-4 h-4 text-textGray" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div class="hidden group-hover:block absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                        <a href="grant-for-artisans.html" class="block px-4 py-2 text-textGray hover:bg-gray-50 hover:text-alifTeal">Grant for Artisans</a>
+                        <a href="scholarship.html" class="block px-4 py-2 text-textGray hover:bg-gray-50 hover:text-alifTeal">Scholarship</a>
+                        <a href="career-counseling.html" class="block px-4 py-2 text-textGray hover:bg-gray-50 hover:text-alifTeal">Career Counseling</a>
+                    </div>
+                </div>
+                <a href="events.html" class="text-textGray font-semibold hover:text-alifTeal transition">Latest Events</a>
+                <a href="contact.html" class="text-textGray font-semibold hover:text-alifTeal transition">Contact</a>
+                <button class="bg-alifYellow text-alifTeal font-extrabold px-6 py-2 rounded-full shadow-md hover:scale-105 transition-all ml-4">APPLICATION</button>
+      </nav>
+      
+      <!-- Mobile Menu Toggle Button -->
+      <button class="md:hidden flex items-center justify-center p-2" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+        <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+    <!-- Mobile Menu Dropdown -->
+    <div id="mobile-menu" class="md:hidden hidden bg-white w-full shadow-lg">
+            <div class="flex flex-col items-center py-4 space-y-4">
+                <a href="index.html" class="text-textGray font-semibold hover:text-alifTeal transition">Home</a>
+                <a href="about.html" class="text-textGray font-semibold hover:text-alifTeal transition">About Us</a>
+                <div class="relative group w-full flex flex-col items-center">
+                    <button class="text-textGray font-semibold hover:text-alifTeal transition flex items-center w-full justify-center" onclick="document.getElementById('mobile-programs-dropdown').classList.toggle('hidden')">
+                        Programs
+                        <svg class="ml-2 w-4 h-4 text-textGray" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="mobile-programs-dropdown" class="hidden w-56 bg-white border border-gray-200 rounded-lg shadow-lg mt-2">
+                        <a href="grant-for-artisans.html" class="block px-4 py-2 text-textGray hover:bg-gray-50 hover:text-alifTeal">Grant for Artisans</a>
+                        <a href="scholarship.html" class="block px-4 py-2 text-textGray hover:bg-gray-50 hover:text-alifTeal">Scholarship</a>
+                        <a href="career-counseling.html" class="block px-4 py-2 text-textGray hover:bg-gray-50 hover:text-alifTeal">Career Counseling</a>
+                    </div>
+                </div>
+                <a href="events.html" class="text-textGray font-semibold hover:text-alifTeal transition">Latest Events</a>
+                <a href="contact.html" class="text-textGray font-semibold hover:text-alifTeal transition">Contact</a>
+                <button class="bg-alifYellow text-alifTeal font-extrabold px-6 py-2 rounded-full shadow-md hover:scale-105 transition-all">APPLICATION</button>
+            </div>
+    </div>
+  </header>
+
+    <!-- Hero Section -->
+    <section class="relative bg-[#F0FDF4] py-16">
+        <div class="container mx-auto px-4 text-center">
+            <div class="inline-flex items-center space-x-2 mb-4">
+                <span class="bg-[#FFCD28] text-[#194341] text-xs uppercase font-bold px-3 py-1 rounded-l-full">IMPACT</span>
+                <span class="bg-[#2CB770] text-white text-xs uppercase font-bold px-3 py-1 rounded-r-full">JOURNAL</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black text-[#194341] uppercase">Stories of Hope & Recent Milestones</h1>
+            <p class="mt-6 text-lg text-gray-700 max-w-3xl mx-auto">
+                From university auditoriums to rural health centers, witness the tangible change ALIF is driving across Nigeria. Our events are more than dates; they are lives transformed.
+            </p>
+        </div>
+    </section>
+
+    <!-- Dynamic Events Section -->
+    <section class="bg-[#F0FDF4] py-16">
+      <div class="container mx-auto px-4">
+        <div id="featuredEvent" class="md:flex md:gap-6 items-center">
+          <div class="w-full text-center py-20">
+            <h2 class="text-3xl font-black text-[#194341]">Loading latest event...</h2>
+            <p class="mt-4 text-[#5F6973]">Please wait while we load the latest ALIF event stories.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16">
+      <div class="container mx-auto px-4">
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h2 class="text-3xl font-black text-[#194341]">All Events</h2>
+            <p class="text-[#5F6973]">Events published by admin appear below.</p>
+          </div>
+        </div>
+        <div id="eventsList" class="grid md:grid-cols-2 gap-12">
+          <div class="col-span-2 text-center text-[#5F6973]">Loading event posts...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sticky Up Arrow Button -->
+    <button class="fixed bottom-4 right-4 bg-[#FFCD28] text-white p-4 rounded-full shadow-lg">↑</button>
+
+    <script>
+      async function loadEvents() {
+        try {
+          const res = await fetch(`${window.API_BASE}/events`);
+          if (!res.ok) throw new Error('Failed to load events');
+          const events = await res.json();
+          const featuredEvent = document.getElementById('featuredEvent');
+          const eventsList = document.getElementById('eventsList');
+
+          if (!Array.isArray(events) || events.length === 0) {
+            featuredEvent.innerHTML = '<div class="w-full text-center py-20"><h2 class="text-3xl font-black text-[#194341]">No event posts yet</h2><p class="mt-4 text-[#5F6973]">Admin content will appear here once events are published.</p></div>';
+            eventsList.innerHTML = '<div class="col-span-2 text-center text-[#5F6973]">No published events found.</div>';
+            return;
+          }
+
+          const sorted = [...events].sort((a, b) => new Date(b.date || b.created_at) - new Date(a.date || a.created_at));
+          const latest = sorted[0];
+          const latestImage = latest.image_url ? `<div class="md:w-1/2 mb-8 md:mb-0"><img src="${latest.image_url}" class="w-full h-auto rounded-3xl object-cover" /></div>` : '';
+          featuredEvent.innerHTML = `
+            <div class="md:w-1/2 mb-8 md:mb-0">
+              <h2 class="text-3xl font-bold text-[#194341]">${latest.name || 'Untitled Event'}</h2>
+              <p class="mt-4 text-gray-700">${latest.description || 'No description available.'}</p>
+              <p class="mt-4 text-sm text-[#5F6973]">${latest.date ? new Date(latest.date).toLocaleDateString() : ''}${latest.location ? ' • ' + latest.location : ''}</p>
+              <a href="event.html?id=${latest.id}" class="inline-block mt-6 bg-[#FFCD28] text-[#194341] font-bold px-6 py-3 rounded-full shadow-md hover:bg-yellow-300 transition">View Details</a>
+            </div>
+            ${latestImage}
+          `;
+
+          eventsList.innerHTML = sorted.map(event => `
+            <div class="bg-white p-6 rounded-3xl shadow-lg">
+              ${event.image_url ? `<div class="rounded-t-full overflow-hidden border-8 border-[#FDF2F2] mb-4"><img src="${event.image_url}" alt="${event.name}" class="w-full h-64 object-cover" /></div>` : ''}
+              <h3 class="text-2xl font-bold text-[#194341]">${event.name || 'Untitled Event'}</h3>
+              <p class="mt-2 text-gray-700">${event.description ? event.description.substring(0, 200) + (event.description.length > 200 ? '...' : '') : 'No details available.'}</p>
+              <div class="mt-4 flex items-center justify-between text-sm text-[#5F6973]">
+                <span>${event.date ? new Date(event.date).toLocaleDateString() : 'Date TBA'}</span>
+                <span>${event.location || 'Location TBA'}</span>
+              </div>
+              <a href="event.html?id=${event.id}" class="text-[#FFCD28] font-bold hover-arrow mt-4 inline-block">Read More</a>
+            </div>
+          `).join('');
+        } catch (error) {
+          console.error(error);
+          document.getElementById('featuredEvent').innerHTML = '<div class="w-full text-center py-20"><h2 class="text-3xl font-black text-[#194341]">Unable to load events</h2><p class="mt-4 text-[#5F6973]">Please refresh or check your connection.</p></div>';
+          document.getElementById('eventsList').innerHTML = '<div class="col-span-2 text-center text-[#5F6973]">Failed to load events.</div>';
+        }
+      }
+      loadEvents();
+    </script>
+
+    <!-- Footer -->
+    <footer class="bg-[#0D2C2B] text-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div>
+                    <img src="alif-logo.png" alt="ALIF Logo" class="mb-4">
+                    <p class="text-sm mb-6">ALIF was officially inaugurated on November 17, 2012, with a sincere desire to benefit humanity through structured charitable activities.</p>
+                    <div class="flex items-center">
+                        <input type="email" placeholder="Email Address" class="w-full px-4 py-2 text-black rounded-l-md focus:outline-none">
+                        <button class="bg-[#FFCD28] text-black px-4 py-2 rounded-r-md">Subscribe</button>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Impact Areas</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-[#FFCD28] transition">Application</a></li>
+                        <li><a href="#" class="hover:text-[#FFCD28] transition">Football</a></li>
+                        <li><a href="#" class="hover:text-[#FFCD28] transition">School Outreach</a></li>
+                        <li><a href="#" class="hover:text-[#FFCD28] transition">Medical Outreach</a></li>
+                        <li><a href="#" class="hover:text-[#FFCD28] transition">PhotoSpeaks</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Educational Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-[#FFCD28] transition">Secondary</a></li>
+                        <li><a href="#" class="hover:text-[#FFCD28] transition">College of Education</a></li>
+                        <li><a href="#" class="hover:text-[#FFCD28] transition">Polytechnic</a></li>
+                        <li><a href="#" class="hover:text-[#FFCD28] transition">University</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+                    <ul class="space-y-2">
+                        <li><a href="tel:+2348135283434" class="hover:text-[#FFCD28] transition">(+234) 813 5283 434</a></li>
+                        <li><a href="mailto:info@alikpeafoundation.org" class="hover:text-[#FFCD28] transition">info@alikpeafoundation.org</a></li>
+                        <li>True Vine Plaza, 66b Ujoelen Road, Ekpoma, Edo State, NG</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+
+
+
