@@ -4,7 +4,7 @@ const path = require('path');
 const envDialect = (process.env.DB_DIALECT || (process.env.NODE_ENV === 'production' ? 'sqlite' : 'mysql')).toLowerCase();
 const dbName = 'railway';
 const dbUser = 'root';
-const dbPassword = '';
+const dbPassword = process.env.MYSQL_ROOT_PASSWORD || '';
 const dbHost = 'mysql.railway.internal';
 const dbPort = 3306;
 
