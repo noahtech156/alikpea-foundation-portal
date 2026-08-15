@@ -18,7 +18,15 @@ if (envDialect === 'mysql') {
     logging: false,
     charset: 'utf8mb4',
     collate: 'utf8mb4_unicode_ci',
-    pool: { max: 5, min: 0, acquire: 30000, idle: 10000 }
+    pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
+    // Sequelize coerces a falsy password (e.g. '') to `null` internally
+    // (see lib/sequelize.js: `config.password || this.options.password || null`),
+    // which causes mysql2 to omit the password entirely and MySQL then
+    // rejects the connection with "using password: NO". Explicitly set the
+    // password via dialectOptions so mysql2 always receives an empty string.
+    dialectOptions: {
+      password: dbPassword
+    }
   });
 } else {
   sequelize = new Sequelize({
@@ -36,7 +44,10 @@ async function ensureDatabaseExists() {
     port: dbPort,
     dialect: 'mysql',
     logging: false,
-    pool: { max: 1, min: 0, acquire: 30000, idle: 10000 }
+    pool: { max: 1, min: 0, acquire: 30000, idle: 10000 },
+    dialectOptions: {
+      password: dbPassword
+    }
   });
 
   try {
