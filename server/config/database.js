@@ -2,11 +2,11 @@ const { Sequelize } = require('sequelize');
 const path = require('path');
 
 const envDialect = (process.env.DB_DIALECT || (process.env.NODE_ENV === 'production' ? 'sqlite' : 'mysql')).toLowerCase();
-const dbName = process.env.DB_NAME || 'alif_foundation';
-const dbUser = process.env.DB_USER || 'root';
-const dbPassword = process.env.DB_PASSWORD || '';
-const dbHost = process.env.DB_HOST || 'localhost';
-const dbPort = Number(process.env.DB_PORT || 3306);
+const dbName = 'railway';
+const dbUser = 'root';
+const dbPassword = '';
+const dbHost = 'mysql.railway.internal';
+const dbPort = 3306;
 
 let sequelize;
 
