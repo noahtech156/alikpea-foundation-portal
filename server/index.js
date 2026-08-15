@@ -44,9 +44,11 @@ app.get('*', (req, res) => {
 });
 
 // Database init + seed
-const { sequelize, Admin, NewsTicker, SiteSetting } = require('./models');
+const { sequelize, ensureDatabaseExists, Admin, Student, Application, NewsTicker, SiteSetting } = require('./models');
 
 async function initDB() {
+  await ensureDatabaseExists();
+  await sequelize.authenticate();
   await sequelize.sync({ alter: true });
 
   // Seed default admin
@@ -80,6 +82,40 @@ async function initDB() {
       { key: 'hero_subtitle', value: 'ALIF is dedicated to empowering Nigeria\'s most vulnerable—providing scholarships for indigent students, supporting widows and the elderly, and offering free medical care to those in need.', label: 'Hero Subtitle' },
       { key: 'scholarship_open', value: 'true', label: 'Scholarship Applications Open' }
     ]);
+  }
+
+  // Seed local test student account for dashboard testing
+  const studentTestEmail = 'teststudent@alikpeafoundation.org';
+  const defaultStudentPassword = 'Test@1234';
+  const existingStudent = await Student.findOne({ where: { email: studentTestEmail } });
+  if (!existingStudent) {
+    const existingApp = await Application.findOne({ where: { email: studentTestEmail } });
+    let app = existingApp;
+    if (!app) {
+      app = await Application.create({
+        application_id: `ALIF-${new Date().getFullYear()}-TEST`,
+        full_name: 'Test Student',
+        email: studentTestEmail,
+        phone: '08000000000',
+        dob: '2000-01-01',
+        gender: 'Other',
+        address: 'Test Address',
+        lga: 'Test LGA',
+        state: 'Test State',
+        institution: 'Test University',
+        faculty: 'Test Faculty',
+        department: 'Test Department',
+        course: 'Test Course',
+        level: '100',
+        matric_number: 'TEST12345',
+        cgpa: '4.0',
+        declaration: true,
+        status: 'accepted'
+      });
+    }
+    const hashedStudentPassword = await bcrypt.hash(defaultStudentPassword, 10);
+    await Student.create({ email: studentTestEmail, password: hashedStudentPassword, application_id: app.id, is_active: true });
+    console.log(`✅ Test student account created: ${studentTestEmail} / ${defaultStudentPassword}`);
   }
 
   console.log('✅ Database initialized');

@@ -11,6 +11,13 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => cb(null, `${Date.now()}-${file.fieldname}${path.extname(file.originalname)}`)
 });
 const upload = multer({ storage, limits: { fileSize: 20 * 1024 * 1024 } });
+const homepageImageUpload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => cb(null, path.join(__dirname, '../../uploads/content')),
+    filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname.replace(/\s+/g, '-')}`)
+  }),
+  limits: { fileSize: 10 * 1024 * 1024 }
+});
 
 // --- Posts ---
 router.get('/posts', async (req, res) => {
@@ -210,6 +217,38 @@ router.put('/settings', authenticateAdmin, async (req, res) => {
     for (const [key, value] of Object.entries(req.body)) {
       await SiteSetting.upsert({ key, value });
     }
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post('/homepage-images/upload', authenticateAdmin, homepageImageUpload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
+    const key = req.body.key;
+    if (!key) return res.status(400).json({ error: 'Missing image key' });
+    const imageUrl = `/uploads/content/${req.file.filename}`;
+    await SiteSetting.upsert({ key, value: imageUrl, label: key });
+    res.json({ success: true, key, imageUrl });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Delete a homepage image setting and remove the file if present
+router.delete('/homepage-images/:key', authenticateAdmin, async (req, res) => {
+  try {
+    const key = req.params.key;
+    const setting = await SiteSetting.findOne({ where: { key } });
+    if (!setting) return res.status(404).json({ error: 'Not found' });
+    const filePath = setting.value;
+    if (filePath && filePath.startsWith('/uploads/content/')) {
+      const fs = require('fs');
+      const full = path.join(__dirname, '..', '..', filePath);
+      try { if (fs.existsSync(full)) fs.unlinkSync(full); } catch(e) { console.error('Failed to delete file', e); }
+    }
+    await setting.destroy();
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });

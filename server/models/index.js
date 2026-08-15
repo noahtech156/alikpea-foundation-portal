@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const { sequelize, ensureDatabaseExists } = require('../config/database');
 
 // Admin model
 const Admin = sequelize.define('Admin', {
@@ -97,9 +97,16 @@ const Disbursement = sequelize.define('Disbursement', {
   account_number: { type: DataTypes.STRING },
   amount: { type: DataTypes.DECIMAL(10, 2) },
   date_received: { type: DataTypes.DATEONLY },
+  school_portal_link: { type: DataTypes.STRING },
+  student_kofa_id: { type: DataTypes.STRING },
+  student_kofa_password: { type: DataTypes.STRING },
   remarks: { type: DataTypes.TEXT },
   reference_number: { type: DataTypes.STRING },
-  status: { type: DataTypes.ENUM('pending', 'approved', 'paid', 'rejected'), defaultValue: 'pending' }
+  status: { type: DataTypes.ENUM('pending', 'acknowledged', 'approved', 'paid', 'rejected'), defaultValue: 'pending' },
+  paid_amount: { type: DataTypes.DECIMAL(10,2) },
+  paid_at: { type: DataTypes.DATE },
+  student_confirmed: { type: DataTypes.BOOLEAN, defaultValue: false },
+  student_confirmed_at: { type: DataTypes.DATE }
 }, { tableName: 'disbursements', timestamps: true });
 
 // Appreciation remark model
@@ -128,11 +135,23 @@ const SiteSetting = sequelize.define('SiteSetting', {
   label: { type: DataTypes.STRING }
 }, { tableName: 'site_settings', timestamps: true });
 
+// Reset token model (for password recovery)
+const ResetToken = sequelize.define('ResetToken', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  token: { type: DataTypes.STRING, allowNull: false, unique: true },
+  user_type: { type: DataTypes.ENUM('admin', 'student'), allowNull: false },
+  user_id: { type: DataTypes.INTEGER, allowNull: false },
+  expires_at: { type: DataTypes.DATE, allowNull: false },
+  used: { type: DataTypes.BOOLEAN, defaultValue: false }
+}, { tableName: 'reset_tokens', timestamps: true });
+
 module.exports = {
   sequelize,
+  ensureDatabaseExists,
   Admin,
   Student,
   Application,
+  ResetToken,
   Event,
   Post,
   NewsTicker,

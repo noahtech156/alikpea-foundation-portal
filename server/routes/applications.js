@@ -164,7 +164,32 @@ router.patch('/:id/accept', authenticateAdmin, async (req, res) => {
     // Send acceptance email with credentials
     sendAcceptanceEmail(app.email, app.full_name, rawPassword).catch(console.error);
 
-    res.json({ success: true, message: 'Application accepted, student account created' });
+    // Return the temporary password so admin can see it immediately (one-time)
+    res.json({ success: true, message: 'Application accepted, student account created', password: rawPassword, email: app.email });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Resend acceptance email (generates a new temporary password and emails student)
+router.post('/:id/resend-accept', authenticateAdmin, async (req, res) => {
+  try {
+    const app = await Application.findByPk(req.params.id);
+    if (!app) return res.status(404).json({ error: 'Not found' });
+
+    // Find related student
+    const student = await Student.findOne({ where: { email: app.email } });
+    if (!student) return res.status(404).json({ error: 'Student account not found' });
+
+    // Generate new temporary password
+    const rawPassword = `AF${new Date().getFullYear()}@${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    const hashed = await bcrypt.hash(rawPassword, 10);
+    await student.update({ password: hashed, is_active: true });
+
+    // Email new credentials
+    sendAcceptanceEmail(student.email, app.full_name, rawPassword).catch(console.error);
+
+    res.json({ success: true, message: 'Acceptance email resent with temporary password' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -192,6 +217,34 @@ router.get('/stats/summary', authenticateAdmin, async (req, res) => {
     const accepted = await Application.count({ where: { status: 'accepted' } });
     const rejected = await Application.count({ where: { status: 'rejected' } });
     res.json({ total, pending, under_review, accepted, rejected });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Export applications as CSV
+router.get('/export/csv', authenticateAdmin, async (req, res) => {
+  try {
+    const { status, search } = req.query;
+    const where = {};
+    const { Op } = require('sequelize');
+    if (status) where.status = status;
+    if (search) {
+      where[Op.or] = [
+        { full_name: { [Op.like]: `%${search}%` } },
+        { email: { [Op.like]: `%${search}%` } },
+        { institution: { [Op.like]: `%${search}%` } },
+        { application_id: { [Op.like]: `%${search}%` } }
+      ];
+    }
+    const rows = await Application.findAll({ where, order: [['createdAt','DESC']] });
+    const fields = ['application_id','full_name','email','phone','institution','faculty','department','course','level','matric_number','cgpa','status','createdAt'];
+    function escapeCsv(v){ if (v === null || v === undefined) return ''; const s = String(v); if (/[",\n]/.test(s)) return '"' + s.replace(/"/g,'""') + '"'; return s; }
+    let csv = fields.join(',') + '\n';
+    for (const r of rows) csv += fields.map(f => escapeCsv(r[f])).join(',') + '\n';
+    res.setHeader('Content-Type','text/csv');
+    res.setHeader('Content-Disposition','attachment; filename="applications.csv"');
+    res.send(csv);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

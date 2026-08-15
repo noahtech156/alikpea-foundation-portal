@@ -211,6 +211,48 @@
 
       <!-- SITE SETTINGS TAB -->
       <div class="tab-content" id="tab-settings">
+        <div class="card mb-4">
+          <h3 class="text-alifTeal font-black mb-4">Homepage Image Uploads</h3>
+          <p class="text-textGray text-sm mb-4">Upload the remaining homepage images here. These will appear on the landing page automatically.</p>
+          <div id="homepage-images-preview" class="grid grid-cols-3 gap-3 mb-4"></div>
+          <form id="homepage-images-form" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-alifTeal uppercase mb-1">Scholarship image</label>
+                <input type="file" name="image" accept=".jpg,.jpeg,.png,.webp" class="text-sm">
+                <input type="hidden" name="key" value="homepage_scholarship_image">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-alifTeal uppercase mb-1">ALIF Community image</label>
+                <input type="file" name="image" accept=".jpg,.jpeg,.png,.webp" class="text-sm">
+                <input type="hidden" name="key" value="homepage_alif_community_image">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-alifTeal uppercase mb-1">ALIF Medical image</label>
+                <input type="file" name="image" accept=".jpg,.jpeg,.png,.webp" class="text-sm">
+                <input type="hidden" name="key" value="homepage_alif_medical_image">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-alifTeal uppercase mb-1">Grant for Artisans image</label>
+                <input type="file" name="image" accept=".jpg,.jpeg,.png,.webp" class="text-sm">
+                <input type="hidden" name="key" value="homepage_grant_artisans_image">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-alifTeal uppercase mb-1">Mentoring Program image</label>
+                <input type="file" name="image" accept=".jpg,.jpeg,.png,.webp" class="text-sm">
+                <input type="hidden" name="key" value="homepage_mentoring_program_image">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-alifTeal uppercase mb-1">Cheque 2 image</label>
+                <input type="file" name="image" accept=".jpg,.jpeg,.png,.webp" class="text-sm">
+                <input type="hidden" name="key" value="homepage_cheque2_image">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload Selected Images</button>
+          </form>
+          <div id="homepage-images-result" class="hidden mt-3 text-sm font-bold text-alifGreen"></div>
+        </div>
+
         <div class="card">
           <h3 class="text-alifTeal font-black mb-4">Site Settings</h3>
           <form id="settings-form" class="space-y-4">
@@ -450,7 +492,71 @@
       const el = document.getElementById(`setting-${key}`);
       if (el) el.value = value || '';
     }
+    // Render homepage image previews
+    const homepageKeys = [
+      { key: 'homepage_scholarship_image', label: 'Scholarship' },
+      { key: 'homepage_alif_community_image', label: 'ALIF Community' },
+      { key: 'homepage_alif_medical_image', label: 'ALIF Medical' },
+      { key: 'homepage_grant_artisans_image', label: 'Grant for Artisans' },
+      { key: 'homepage_mentoring_program_image', label: 'Mentoring Program' },
+      { key: 'homepage_cheque2_image', label: 'Cheque 2' }
+    ];
+    const preview = document.getElementById('homepage-images-preview');
+    preview.innerHTML = homepageKeys.map(h => {
+      const url = settings[h.key] || '';
+      return `<div class="p-2 bg-white rounded-lg border text-center">
+        <div class="text-xs font-semibold text-textGray mb-2">${h.label}</div>
+        ${url ? `<img src="${url}" class="w-full h-32 object-cover rounded mb-2"/>` : `<div class="w-full h-32 bg-gray-50 rounded mb-2 flex items-center justify-center text-gray-300">No image</div>`}
+        <div class="flex gap-2 justify-center">
+          <label class="px-3 py-1 bg-alifTeal text-white rounded cursor-pointer text-xs">Replace
+            <input type="file" data-key="${h.key}" accept=".jpg,.jpeg,.png,.webp" class="hidden preview-replace-input">
+          </label>
+          ${url ? `<button data-key="${h.key}" class="btn-delete-image px-3 py-1 bg-red-50 text-red-600 rounded text-xs">Delete</button>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+    // attach listeners for replace and delete
+    document.querySelectorAll('.preview-replace-input').forEach(inp => {
+      inp.addEventListener('change', async function(){
+        const file = this.files[0]; if (!file) return;
+        const fd = new FormData(); fd.append('image', file); fd.append('key', this.dataset.key);
+        const r = await fetch(`${API}/api/content/homepage-images/upload`, { method: 'POST', headers, body: fd });
+        if (r.ok) { toast('Image replaced'); loadSettings(); } else { toast('Failed to replace', false); }
+      });
+    });
+    document.querySelectorAll('.btn-delete-image').forEach(b => b.addEventListener('click', async function(){
+      const key = this.dataset.key;
+      if (!confirm('Delete this homepage image?')) return;
+      const r = await fetch(`${API}/api/content/homepage-images/${encodeURIComponent(key)}`, { method: 'DELETE', headers });
+      if (r.ok) { toast('Deleted'); loadSettings(); } else { toast('Failed to delete', false); }
+    }));
   }
+
+  document.getElementById('homepage-images-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const resultEl = document.getElementById('homepage-images-result');
+    const inputs = this.querySelectorAll('input[type="file"]');
+    let uploaded = 0;
+    for (const input of inputs) {
+      if (!input.files || !input.files[0]) continue;
+      const fd = new FormData();
+      fd.append('image', input.files[0]);
+      fd.append('key', input.parentElement.querySelector('input[type="hidden"]').value);
+      const res = await fetch(`${API}/api/content/homepage-images/upload`, { method:'POST', headers, body: fd });
+      const data = await res.json();
+      if (res.ok) uploaded++;
+      else console.error('Upload failed', data);
+    }
+    if (uploaded > 0) {
+      resultEl.textContent = `✅ Uploaded ${uploaded} image${uploaded > 1 ? 's' : ''} successfully.`;
+      resultEl.classList.remove('hidden');
+      this.reset();
+      await loadSettings();
+    } else {
+      resultEl.textContent = '⚠️ No images were uploaded.';
+      resultEl.classList.remove('hidden');
+    }
+  });
 
   document.getElementById('settings-form').addEventListener('submit', async function(e) {
     e.preventDefault();

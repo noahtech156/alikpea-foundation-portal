@@ -1,23 +1,26 @@
 const { Sequelize } = require('sequelize');
 const path = require('path');
 
+const envDialect = (process.env.DB_DIALECT || (process.env.NODE_ENV === 'production' ? 'sqlite' : 'mysql')).toLowerCase();
+const dbName = process.env.DB_NAME || 'alif_foundation';
+const dbUser = process.env.DB_USER || 'root';
+const dbPassword = process.env.DB_PASSWORD || '';
+const dbHost = process.env.DB_HOST || 'localhost';
+const dbPort = Number(process.env.DB_PORT || 3306);
+
 let sequelize;
 
-if (process.env.DB_DIALECT === 'mysql') {
-  sequelize = new Sequelize(
-    process.env.DB_NAME || 'alif_foundation',
-    process.env.DB_USER || 'root',
-    process.env.DB_PASSWORD || '',
-    {
-      host: process.env.DB_HOST || 'localhost',
-      port: process.env.DB_PORT || 3306,
-      dialect: 'mysql',
-      logging: false,
-      pool: { max: 5, min: 0, acquire: 30000, idle: 10000 }
-    }
-  );
+if (envDialect === 'mysql') {
+  sequelize = new Sequelize(dbName, dbUser, dbPassword, {
+    host: dbHost,
+    port: dbPort,
+    dialect: 'mysql',
+    logging: false,
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci',
+    pool: { max: 5, min: 0, acquire: 30000, idle: 10000 }
+  });
 } else {
-  // Default: SQLite (works on Replit out of the box)
   sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: path.join(__dirname, '../../database.sqlite'),
@@ -25,4 +28,24 @@ if (process.env.DB_DIALECT === 'mysql') {
   });
 }
 
-module.exports = sequelize;
+async function ensureDatabaseExists() {
+  if (envDialect !== 'mysql') return;
+
+  const adminConnection = new Sequelize('mysql', dbUser, dbPassword, {
+    host: dbHost,
+    port: dbPort,
+    dialect: 'mysql',
+    logging: false,
+    pool: { max: 1, min: 0, acquire: 30000, idle: 10000 }
+  });
+
+  try {
+    await adminConnection.authenticate();
+    await adminConnection.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\``);
+    console.log(`✅ Ensured MySQL database exists: ${dbName}`);
+  } finally {
+    await adminConnection.close();
+  }
+}
+
+module.exports = { sequelize, ensureDatabaseExists };

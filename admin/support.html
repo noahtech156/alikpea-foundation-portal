@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Support - ALIF</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{alifTeal:'#194341',alifYellow:'#FFCD28',alifGreen:'#2CB770',textGray:'#5F6973'}}}}</script>
+</head>
+<body class="bg-gray-50 p-6">
+  <div class="max-w-5xl mx-auto bg-white rounded-xl p-6">
+    <h1 class="text-2xl font-bold text-alifTeal mb-4">Support — Accepted Students</h1>
+    <p class="text-sm text-textGray mb-4">Search a student, view their application, or reset their password.</p>
+    <div class="mb-4 flex gap-2">
+      <input id="search" placeholder="Search email or name" class="flex-1 border rounded px-3 py-2" />
+      <button id="btn-search" class="bg-alifTeal text-white px-4 py-2 rounded">Search</button>
+      <button id="btn-refresh" class="bg-gray-100 px-4 py-2 rounded">Refresh</button>
+    </div>
+    <div id="list">Loading...</div>
+  </div>
+
+<script src="../config.js"></script>
+<script>
+const API = window.API_BASE || '';
+if (!localStorage.getItem('admin_token')) window.location.href = 'index.html';
+const headers = { 'Authorization': `Bearer ${localStorage.getItem('admin_token')}` };
+
+async function load(search='') {
+  document.getElementById('list').innerHTML = 'Loading...';
+  try {
+    const res = await fetch(`${API}/api/students/admin/list`, { headers: { ...headers, 'Accept': 'application/json' } });
+    if (!res.ok) {
+      let errorText = `Error ${res.status}: ${res.statusText}`;
+      try {
+        const json = await res.json();
+        errorText = json.error || json.message || errorText;
+      } catch (_) {
+        const text = await res.text();
+        if (text.trim().startsWith('<')) {
+          errorText = 'Server returned HTML instead of JSON. Please check the backend route and token.';
+        } else {
+          errorText = text || errorText;
+        }
+      }
+      document.getElementById('list').innerHTML = `<p class="text-red-600">${errorText}</p>`;
+      return;
+    }
+    const data = await res.json();
+    if (!Array.isArray(data)) {
+      document.getElementById('list').innerHTML = `<p class="text-red-600">Unexpected API response format.</p>`;
+      return;
+    }
+    const filtered = data.filter(s => !search || s.email.includes(search) || (s.application && s.application.full_name && s.application.full_name.toLowerCase().includes(search.toLowerCase())));
+    if (!filtered.length) { document.getElementById('list').innerHTML = '<p class="text-textGray">No students found.</p>'; return; }
+    document.getElementById('list').innerHTML = `<table class="w-full table-auto border-collapse"><thead><tr class="text-left"><th class="px-3 py-2">Email</th><th class="px-3 py-2">Name</th><th class="px-3 py-2">Status</th><th class="px-3 py-2">Actions</th></tr></thead><tbody>${filtered.map(s => `<tr class="border-t"><td class="px-3 py-2">${s.email}</td><td class="px-3 py-2">${s.application?.full_name||'—'}</td><td class="px-3 py-2">${s.is_active?'<span class="text-green-600">Active</span>':'<span class="text-red-600">Inactive</span>'}</td><td class="px-3 py-2"><button onclick="reset(${s.id})" class="bg-alifYellow text-alifTeal px-3 py-1 rounded">Reset Password</button></td></tr>`).join('')}</tbody></table>`;
+  } catch (err) {
+    document.getElementById('list').innerHTML = `<p class="text-red-600">Network error: ${err.message}</p>`;
+  }
+}
+
+async function reset(id) {
+  if (!confirm('Send a temporary password to this student via email?')) return;
+  const res = await fetch(`${API}/api/auth/admin/reset-student/${id}`, { method: 'PATCH', headers });
+  if (res.ok) { alert('Temporary password emailed.'); load(document.getElementById('search').value); } else { alert('Failed to reset password'); }
+}
+
+document.getElementById('btn-search').addEventListener('click', ()=> load(document.getElementById('search').value));
+document.getElementById('btn-refresh').addEventListener('click', ()=> load(''));
+load();
+</script>
+</body>
+</html>

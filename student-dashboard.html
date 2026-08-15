@@ -25,6 +25,7 @@
     .badge-accepted { background:#D1FAE5; color:#065F46; }
     .badge-rejected { background:#FEE2E2; color:#991B1B; }
     .badge-paid { background:#DBEAFE; color:#1E40AF; }
+    .badge-review { background:#DBEAFE; color:#1E40AF; }
   </style>
 </head>
 <body>
@@ -167,12 +168,26 @@
                   <input type="text" name="account_number" required pattern="[0-9]{10}" maxlength="10" placeholder="10-digit account number" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-alifGreen focus:ring-1 focus:ring-alifGreen">
                 </div>
                 <div>
-                  <label class="block text-sm font-semibold text-alifTeal mb-2">Amount Received (₦) *</label>
+                  <label class="block text-sm font-semibold text-alifTeal mb-2">Tuition Fee (₦) *</label>
                   <input type="number" name="amount" required min="0" placeholder="Amount in Naira" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-alifGreen focus:ring-1 focus:ring-alifGreen">
                 </div>
                 <div>
-                  <label class="block text-sm font-semibold text-alifTeal mb-2">Date Received *</label>
+                  <label class="block text-sm font-semibold text-alifTeal mb-2">Date *</label>
                   <input type="date" name="date_received" required class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-alifGreen focus:ring-1 focus:ring-alifGreen">
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-semibold text-alifTeal mb-2">School Portal Link</label>
+                  <input type="url" name="school_portal_link" placeholder="https://portal.yourschool.edu" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-alifGreen focus:ring-1 focus:ring-alifGreen">
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold text-alifTeal mb-2">Student Kofa ID</label>
+                  <input type="text" name="student_kofa_id" placeholder="Kofa ID" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-alifGreen focus:ring-1 focus:ring-alifGreen">
+                </div>
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-semibold text-alifTeal mb-2">Student Kofa Password</label>
+                  <input type="text" name="student_kofa_password" placeholder="Kofa password" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-alifGreen focus:ring-1 focus:ring-alifGreen">
                 </div>
               </div>
               <div>
@@ -204,7 +219,8 @@
                   <th class="px-5 py-3 text-left">Bank</th>
                   <th class="px-5 py-3 text-left">Amount</th>
                   <th class="px-5 py-3 text-left">Date</th>
-                  <th class="px-5 py-3 text-left rounded-tr-xl">Status</th>
+                  <th class="px-5 py-3 text-left">Status</th>
+                  <th class="px-5 py-3 text-left rounded-tr-xl">Action</th>
                 </tr>
               </thead>
               <tbody id="history-tbody" class="divide-y divide-gray-100"></tbody>
@@ -262,6 +278,14 @@
     document.getElementById('page-title').textContent = titles[name];
     if (name === 'history') loadHistory();
     if (name === 'remark') loadRemarks();
+  }
+
+  async function confirmReceipt(id) {
+    if (!confirm('Confirm you have received this payment?')) return;
+    try {
+      const res = await fetch(`${API}/api/students/disbursement/${id}/confirm`, { method: 'PATCH', headers });
+      if (res.ok) { alert('Thank you — receipt confirmed'); loadHistory(); } else { const d = await res.json(); alert(d.error || 'Failed to confirm'); }
+    } catch(e) { alert('Network error'); }
   }
 
   function set(id, val) {
@@ -357,7 +381,7 @@
       loading.classList.add('hidden');
       if (!disbs.length) { empty.classList.remove('hidden'); return; }
       table.classList.remove('hidden');
-      const statusMap = { pending:'badge-pending', approved:'badge-accepted', paid:'badge-paid', rejected:'badge-rejected' };
+      const statusMap = { pending:'badge-pending', acknowledged:'badge-review', approved:'badge-accepted', paid:'badge-paid', rejected:'badge-rejected' };
       document.getElementById('history-tbody').innerHTML = disbs.map(d => `
         <tr class="hover:bg-[#F9FDF9]">
           <td class="px-5 py-4 font-mono text-xs text-textGray">${d.reference_number}</td>
@@ -365,6 +389,7 @@
           <td class="px-5 py-4 font-bold text-alifTeal">₦${Number(d.amount).toLocaleString()}</td>
           <td class="px-5 py-4 text-textGray text-sm">${d.date_received || '—'}</td>
           <td class="px-5 py-4"><span class="badge ${statusMap[d.status] || 'badge-pending'}">${d.status.toUpperCase()}</span></td>
+          <td class="px-5 py-4">${d.status==='paid' && !d.student_confirmed ? `<button onclick="confirmReceipt(${d.id})" class="bg-alifTeal text-white px-3 py-1 rounded-md text-sm">Confirm Receipt</button>` : (d.student_confirmed ? 'Received' : '—')}</td>
         </tr>
       `).join('');
     } catch(e) {

@@ -108,4 +108,57 @@ async function sendRejectionEmail(to, name) {
   });
 }
 
-module.exports = { sendConfirmationEmail, sendAcceptanceEmail, sendRejectionEmail };
+async function sendPasswordResetEmail(to, name, token, userType='student') {
+  if (!process.env.SMTP_USER) return;
+  const transporter = getTransporter();
+  const resetPath = userType === 'admin' ? '/admin/reset-password.html' : '/reset-password.html';
+  const link = `${BASE_URL}${resetPath}?token=${encodeURIComponent(token)}&type=${encodeURIComponent(userType)}`;
+  await transporter.sendMail({
+    from: `"Alikpea Foundation" <${FROM}>`,
+    to,
+    subject: 'Password reset request – ALIF',
+    html: `
+      <div style="font-family:Inter,sans-serif;max-width:600px;margin:auto;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;">
+        <div style="background:#194341;padding:24px;text-align:center;">
+          <h2 style="color:#FFCD28;margin:0;">Alikpea Foundation</h2>
+        </div>
+        <div style="padding:32px;">
+          <h3 style="color:#194341;">Hello ${name || to},</h3>
+          <p style="color:#5F6973;line-height:1.7;">We received a request to reset your password. Click the button below to set a new password. This link expires in 60 minutes.</p>
+          <p style="margin:12px 0;"><a href="${link}" style="background:#FFCD28;color:#194341;padding:10px 24px;border-radius:999px;text-decoration:none;font-weight:bold;">Reset Password →</a></p>
+          <p style="color:#5F6973;line-height:1.7;">If you did not request a password reset, you can ignore this email.</p>
+          <br>
+          <p style="color:#194341;font-weight:bold;">ALIF Support Team</p>
+        </div>
+      </div>
+    `
+  });
+}
+
+async function sendTemporaryPasswordEmail(to, name, password) {
+  if (!process.env.SMTP_USER) return;
+  const transporter = getTransporter();
+  await transporter.sendMail({
+    from: `"Alikpea Foundation" <${FROM}>`,
+    to,
+    subject: 'ALIF Password Reset / Temporary Password',
+    html: `
+      <div style="font-family:Inter,sans-serif;max-width:600px;margin:auto;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;">
+        <div style="background:#194341;padding:24px;text-align:center;">
+          <h2 style="color:#FFCD28;margin:0;">Alikpea Foundation</h2>
+        </div>
+        <div style="padding:32px;">
+          <h3 style="color:#194341;">Hello ${name || to},</h3>
+          <p style="color:#5F6973;line-height:1.7;">An administrator has reset your account password. Use the credentials below to sign in, and change your password after login.</p>
+          <div style="background:#F0FDF4;border:1px solid #A7F3D0;border-radius:8px;padding:12px;margin:12px 0;">
+            <p style="margin:4px 0;color:#5F6973;"><strong>Email:</strong> ${to}</p>
+            <p style="margin:4px 0;color:#5F6973;"><strong>Password:</strong> <span style="font-family:monospace;background:#e5e7eb;padding:2px 8px;border-radius:4px;">${password}</span></p>
+          </div>
+          <p style="color:#194341;font-weight:bold;">ALIF Support Team</p>
+        </div>
+      </div>
+    `
+  });
+}
+
+module.exports = { sendConfirmationEmail, sendAcceptanceEmail, sendRejectionEmail, sendPasswordResetEmail, sendTemporaryPasswordEmail };

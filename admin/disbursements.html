@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Disbursements – Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{alifTeal:'#194341',alifYellow:'#FFCD28',alifGreen:'#2CB770',textGray:'#5F6973'}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>body{font-family:'Inter',sans-serif;background:#f1f5f9}.sidebar{width:240px;background:#194341;min-height:100vh}.nav-item{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:10px;cursor:pointer;color:rgba(255,255,255,0.7);font-weight:600}.nav-item:hover,.nav-item.active{background:rgba(255,255,255,0.1);color:white}.card{background:white;border-radius:14px;padding:16px;border:1px solid #e6eef0}.badge{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}.badge-pending{background:#FEF3C7;color:#92400E}.badge-approved{background:#D1FAE5;color:#065F46}.badge-paid{background:#DBEAFE;color:#1E40AF}.badge-rejected{background:#FEE2E2;color:#991B1B}.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:50;align-items:center;justify-content:center}.modal.open{display:flex}</style>
+</head>
+<body>
+<div class="flex min-h-screen">
+  <aside class="sidebar flex-shrink-0 flex flex-col p-4">
+    <div class="mb-4 text-white">
+      <img src="../alif-logo.png" class="h-10 mb-2" onerror="this.style.display='none'">
+      <div class="text-xs font-black">Admin Panel</div>
+      <div id="admin-name" class="text-white/60 text-xs mt-1"></div>
+    </div>
+    <nav class="flex-1 space-y-2">
+      <a href="scholarship.html" class="nav-item">Applications</a>
+      <a href="cms.html" class="nav-item">CMS & Content</a>
+      <a href="disbursements.html" class="nav-item active">Disbursements</a>
+      <a href="support.html" class="nav-item">Support</a>
+    </nav>
+    <div class="mt-4"><button onclick="logout()" class="nav-item text-red-300">Logout</button></div>
+  </aside>
+  <main class="flex-1 p-6 overflow-y-auto">
+    <h1 class="text-2xl font-black text-alifTeal mb-4">Beneficiary Disbursements</h1>
+    <div class="card mb-4">
+      <div class="flex gap-2">
+        <input id="search" placeholder="Search by name, email, reference..." class="flex-1 p-3 border rounded-md" oninput="loadList()">
+        <button onclick="downloadCsv()" class="px-4 py-2 bg-alifTeal text-white rounded-md">Export CSV</button>
+      </div>
+    </div>
+    <div class="mb-4">
+      <button onclick="exportCsv()" class="px-4 py-2 bg-alifTeal text-white rounded-md">Export CSV</button>
+    </div>
+    <div id="list" class="card overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-alifTeal text-white">
+            <th class="p-3 text-left">Reference</th>
+            <th class="p-3 text-left">Applicant</th>
+            <th class="p-3 text-left">Bank</th>
+            <th class="p-3 text-left">Tuition Fee</th>
+            <th class="p-3 text-left">Date</th>
+            <th class="p-3 text-left">Status</th>
+            <th class="p-3 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"><tr><td colspan="7" class="p-6 text-center text-textGray">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<div id="modal" class="modal"><div class="bg-white rounded-2xl max-w-2xl w-full p-6 mx-4">
+  <div class="flex justify-between items-start mb-4"><h2 class="text-lg font-black text-alifTeal">Disbursement Details</h2><button onclick="closeModal()" class="text-gray-500">Close</button></div>
+  <div id="modal-body"></div>
+</div></div>
+
+<script src="../config.js"></script>
+<script>
+  const API = window.API_BASE || '';
+  const token = localStorage.getItem('admin_token');
+  if (!token) window.location.href = 'index.html';
+  document.getElementById('admin-name').textContent = localStorage.getItem('admin_name') || '';
+  const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+
+  async function loadList() {
+    const q = document.getElementById('search').value.toLowerCase();
+    try {
+      const res = await fetch(`${API}/api/students/admin/disbursements`, { headers });
+      const rows = await res.json();
+      const filtered = rows.filter(r => !q || (r.applicant_name||'').toLowerCase().includes(q) || (r.applicant_email||'').toLowerCase().includes(q) || (r.reference_number||'').toLowerCase().includes(q));
+      if (!filtered.length) { document.getElementById('tbody').innerHTML = '<tr><td colspan="7" class="p-6 text-center text-textGray">No disbursements found</td></tr>'; return; }
+      document.getElementById('tbody').innerHTML = filtered.map(r => `
+        <tr class="hover:bg-gray-50">
+          <td class="p-3 font-mono text-xs">${r.reference_number}</td>
+          <td class="p-3">${r.applicant_name}<div class="text-xs text-textGray">${r.applicant_email}</div></td>
+          <td class="p-3">${r.bank_name} - ${r.account_name}</td>
+          <td class="p-3 font-bold">₦${Number(r.amount||0).toLocaleString()}</td>
+          <td class="p-3">${r.date_received||'—'}</td>
+          <td class="p-3"><span class="badge ${r.status==='approved'? 'badge-approved' : r.status==='paid' ? 'badge-paid' : r.status==='rejected' ? 'badge-rejected' : 'badge-pending'}">${(r.status||'').toUpperCase()}</span></td>
+          <td class="p-3">
+            <div class="flex gap-2">
+              <button onclick="view(${r.id})" class="px-3 py-1 bg-gray-100 rounded-md text-sm">View</button>
+              ${r.status==='pending' ? `<button onclick="acknowledge(${r.id})" class="px-3 py-1 bg-yellow-50 rounded-md text-sm">Acknowledge</button>` : ''}
+              ${r.status!=='paid' ? `<button onclick="markPaid(${r.id})" class="px-3 py-1 bg-green-50 rounded-md text-sm">Mark Paid</button>` : ''}
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    } catch(e) { document.getElementById('tbody').innerHTML = '<tr><td colspan="7" class="p-6 text-center text-red-500">Failed to load</td></tr>'; }
+  }
+
+  function view(id) {
+    fetch(`${API}/api/students/admin/disbursements`, { headers }).then(r => r.json()).then(rows => {
+      const item = rows.find(x => x.id===id);
+      if (!item) return;
+      document.getElementById('modal-body').innerHTML = `
+        <div class="grid grid-cols-1 gap-2 text-sm">
+          <div><strong>Reference:</strong> ${item.reference_number}</div>
+          <div><strong>Applicant:</strong> ${item.applicant_name} — ${item.applicant_email}</div>
+          <div><strong>Bank:</strong> ${item.bank_name} — ${item.account_name} — ${item.account_number}</div>
+          <div><strong>Tuition Fee (₦):</strong> ₦${Number(item.amount||0).toLocaleString()}</div>
+          <div><strong>Date:</strong> ${item.date_received||'—'}</div>
+          <div><strong>School Portal Link:</strong> ${item.school_portal_link ? `<a href="${item.school_portal_link}" target="_blank" class="text-alifTeal">Open Portal ↗</a>` : '—'}</div>
+          <div><strong>Student Kofa ID:</strong> ${item.student_kofa_id || '—'}</div>
+          <div><strong>Student Kofa Password:</strong> ${item.student_kofa_password || '—'}</div>
+          <div><strong>Paid Amount:</strong> ${item.paid_amount ? '₦' + Number(item.paid_amount).toLocaleString() : '—'}</div>
+          <div><strong>Paid At:</strong> ${item.paid_at ? new Date(item.paid_at).toLocaleString() : '—'}</div>
+          <div><strong>Student Confirmed:</strong> ${item.student_confirmed ? 'Yes' : 'No'}</div>
+          <div><strong>Remarks:</strong><div class="mt-2 p-3 bg-gray-50 rounded-md">${item.remarks||'—'}</div></div>
+        </div>
+      `;
+      // add acknowledge button
+      const ackBtn = document.createElement('button');
+      ackBtn.textContent = 'Acknowledge';
+      ackBtn.className = 'mt-4 px-3 py-2 bg-green-50 text-green-700 rounded-md';
+      ackBtn.onclick = async function() {
+        try {
+          const r = await fetch(`${API}/api/students/admin/disbursements/${item.id}/status`, { method: 'PATCH', headers, body: JSON.stringify({ status: 'acknowledged' }) });
+          if (r.ok) { alert('Disbursement acknowledged'); closeModal(); loadList(); } else { const d = await r.json(); alert(d.error || 'Failed to acknowledge'); }
+        } catch(e) { alert('Network error'); }
+      };
+      document.getElementById('modal-body').appendChild(ackBtn);
+      document.getElementById('modal').classList.add('open');
+    });
+  }
+
+  function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+  function logout(){ localStorage.removeItem('admin_token'); localStorage.removeItem('admin_name'); localStorage.removeItem('admin_email'); window.location.href='index.html'; }
+
+  loadList();
+
+  function downloadCsv() {
+    const q = document.getElementById('search').value;
+    const url = `${API}/api/students/admin/disbursements/export/csv${q?('?search='+encodeURIComponent(q)) : ''}`;
+    window.open(url, '_blank');
+  }
+
+  async function acknowledge(id) {
+    if (!confirm('Acknowledge this disbursement submission?')) return;
+    try {
+      const res = await fetch(`${API}/api/students/admin/disbursements/${id}/status`, { method: 'PATCH', headers, body: JSON.stringify({ status: 'acknowledged' }) });
+      if (res.ok) { alert('Acknowledged'); loadList(); } else { alert('Failed'); }
+    } catch(e) { alert('Network error'); }
+  }
+
+  async function markPaid(id) {
+    const amt = prompt('Enter amount paid (in Naira):');
+    if (!amt) return;
+    const num = parseFloat(amt.replace(/,/g,''));
+    if (isNaN(num)) { alert('Invalid amount'); return; }
+    try {
+      const res = await fetch(`${API}/api/students/admin/disbursements/${id}/status`, { method: 'PATCH', headers, body: JSON.stringify({ status: 'paid', paid_amount: num }) });
+      if (res.ok) { alert('Marked as paid'); loadList(); } else { const d = await res.json(); alert(d.error || 'Failed'); }
+    } catch(e) { alert('Network error'); }
+  }
+
+  async function exportCsv() {
+    try {
+      const res = await fetch(`${API}/api/students/admin/disbursements/export`, { headers });
+      if (!res.ok) { alert('Failed to export'); return; }
+      const text = await res.text();
+      const blob = new Blob([text], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'disbursements.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    } catch(e) { alert('Network error'); }
+  }
+</script>
+</body>
+</html>
