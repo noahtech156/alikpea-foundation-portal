@@ -242,7 +242,3 @@ app.listen(PORT, '0.0.0.0', async () => {
 });
 
 module.exports = app;
-  console.log('ℹ️ Demo mode: database initialization is temporarily disabled.');
-});
-
-module.exports = app;
