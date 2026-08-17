@@ -1,12 +1,15 @@
 const { Sequelize } = require('sequelize');
 const path = require('path');
 
-const envDialect = (process.env.DB_DIALECT || (process.env.NODE_ENV === 'production' ? 'sqlite' : 'mysql')).toLowerCase();
-const dbName = 'railway';
-const dbUser = 'root';
-const dbPassword = process.env.MYSQL_ROOT_PASSWORD || '';
-const dbHost = 'mysql.railway.internal';
-const dbPort = 3306;
+const envDialect = (
+  process.env.DB_DIALECT || 'mysql'
+).toLowerCase();
+
+const dbName = process.env.DB_NAME || 'defaultdb';
+const dbUser = process.env.DB_USER || 'avnadmin';
+const dbPassword = process.env.DB_PASSWORD || '';
+const dbHost = process.env.DB_HOST || 'localhost';
+const dbPort = Number(process.env.DB_PORT || 3306);
 
 let sequelize;
 
@@ -16,16 +19,23 @@ if (envDialect === 'mysql') {
     port: dbPort,
     dialect: 'mysql',
     logging: false,
+
+    // Aiven requires SSL
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    },
+
     charset: 'utf8mb4',
     collate: 'utf8mb4_unicode_ci',
-    pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
-    // Sequelize coerces a falsy password (e.g. '') to `null` internally
-    // (see lib/sequelize.js: `config.password || this.options.password || null`),
-    // which causes mysql2 to omit the password entirely and MySQL then
-    // rejects the connection with "using password: NO". Explicitly set the
-    // password via dialectOptions so mysql2 always receives an empty string.
-    dialectOptions: {
-      password: dbPassword
+
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
     }
   });
 } else {
@@ -37,26 +47,20 @@ if (envDialect === 'mysql') {
 }
 
 async function ensureDatabaseExists() {
+  // Aiven already provides the database,
+  // so we don't need to create it ourselves.
   if (envDialect !== 'mysql') return;
 
-  const adminConnection = new Sequelize('mysql', dbUser, dbPassword, {
-    host: dbHost,
-    port: dbPort,
-    dialect: 'mysql',
-    logging: false,
-    pool: { max: 1, min: 0, acquire: 30000, idle: 10000 },
-    dialectOptions: {
-      password: dbPassword
-    }
-  });
-
   try {
-    await adminConnection.authenticate();
-    await adminConnection.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\``);
-    console.log(`✅ Ensured MySQL database exists: ${dbName}`);
-  } finally {
-    await adminConnection.close();
+    await sequelize.authenticate();
+    console.log('✅ Connected to MySQL database');
+  } catch (error) {
+    console.error('❌ MySQL connection failed:', error.message);
+    throw error;
   }
 }
 
-module.exports = { sequelize, ensureDatabaseExists };
+module.exports = {
+  sequelize,
+  ensureDatabaseExists
+};
