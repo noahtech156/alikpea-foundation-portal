@@ -4,7 +4,6 @@ const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
 const fs = require('fs');
-const bcrypt = require('bcryptjs');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,7 +17,9 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // Ensure upload directories exist
 ['uploads/documents', 'uploads/events', 'uploads/content'].forEach(dir => {
   const full = path.join(__dirname, '..', dir);
-  if (!fs.existsSync(full)) fs.mkdirSync(full, { recursive: true });
+  if (!fs.existsSync(full)) {
+    fs.mkdirSync(full, { recursive: true });
+  }
 });
 
 // Serve uploads
@@ -31,7 +32,7 @@ app.use('/api/events', require('./routes/events'));
 app.use('/api/content', require('./routes/content'));
 app.use('/api/students', require('./routes/students'));
 
-// Backward-compatible aliases (existing index.html calls these paths without /api prefix)
+// Backward-compatible aliases
 app.use('/content', require('./routes/content'));
 app.use('/events', require('./routes/events'));
 
@@ -43,87 +44,51 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../index.html'));
 });
 
-// Database init + seed
-const { sequelize, ensureDatabaseExists, Admin, Student, Application, NewsTicker, SiteSetting } = require('./models');
+// =====================================================
+// DATABASE INITIALIZATION
+// Temporarily disabled for the client demo.
+// We will enable this again when Railway MySQL is ready.
+// =====================================================
 
-async function initDB() {
-  await ensureDatabaseExists();
-  await sequelize.authenticate();
-  await sequelize.sync({ alter: true });
+// const {
+//   sequelize,
+//   ensureDatabaseExists,
+//   Admin,
+//   Student,
+//   Application,
+//   NewsTicker,
+//   SiteSetting
+// } = require('./models');
 
-  // Seed default admin
-  const adminExists = await Admin.findOne({ where: { email: 'admin@alikpeafoundation.org' } });
-  if (!adminExists) {
-    const hashed = await bcrypt.hash('Admin@ALIF2026', 10);
-    await Admin.create({
-      name: 'Super Admin',
-      email: 'admin@alikpeafoundation.org',
-      password: hashed,
-      role: 'super_admin'
-    });
-    console.log('✅ Default admin created: admin@alikpeafoundation.org / Admin@ALIF2026');
-  }
+// async function initDB() {
+//   await ensureDatabaseExists();
+//   await sequelize.authenticate();
+//   await sequelize.sync({ alter: true });
 
-  // Seed default news ticker
-  const tickerCount = await NewsTicker.count();
-  if (tickerCount === 0) {
-    await NewsTicker.bulkCreate([
-      { content: 'ALIF Scholarship Application for 2026 now open', is_active: true, order_index: 1 },
-      { content: 'Chief (Dr.) Leemon A. Ikepa receives humanitarian award', is_active: true, order_index: 2 },
-      { content: 'Mentoring session scheduled for next week', is_active: true, order_index: 3 }
-    ]);
-  }
+//   // Seed default admin
+//   const adminExists = await Admin.findOne({
+//     where: { email: 'admin@alikpeafoundation.org' }
+//   });
 
-  // Seed default site settings
-  const settingsCount = await SiteSetting.count();
-  if (settingsCount === 0) {
-    await SiteSetting.bulkCreate([
-      { key: 'hero_title', value: 'Welcome to Agbonjagwe Leemon Ikpea Foundation', label: 'Hero Title' },
-      { key: 'hero_subtitle', value: 'ALIF is dedicated to empowering Nigeria\'s most vulnerable—providing scholarships for indigent students, supporting widows and the elderly, and offering free medical care to those in need.', label: 'Hero Subtitle' },
-      { key: 'scholarship_open', value: 'true', label: 'Scholarship Applications Open' }
-    ]);
-  }
+//   if (!adminExists) {
+//     const bcrypt = require('bcryptjs');
+//     const hashed = await bcrypt.hash('Admin@ALIF2026', 10);
 
-  // Seed local test student account for dashboard testing
-  const studentTestEmail = 'teststudent@alikpeafoundation.org';
-  const defaultStudentPassword = 'Test@1234';
-  const existingStudent = await Student.findOne({ where: { email: studentTestEmail } });
-  if (!existingStudent) {
-    const existingApp = await Application.findOne({ where: { email: studentTestEmail } });
-    let app = existingApp;
-    if (!app) {
-      app = await Application.create({
-        application_id: `ALIF-${new Date().getFullYear()}-TEST`,
-        full_name: 'Test Student',
-        email: studentTestEmail,
-        phone: '08000000000',
-        dob: '2000-01-01',
-        gender: 'Other',
-        address: 'Test Address',
-        lga: 'Test LGA',
-        state: 'Test State',
-        institution: 'Test University',
-        faculty: 'Test Faculty',
-        department: 'Test Department',
-        course: 'Test Course',
-        level: '100',
-        matric_number: 'TEST12345',
-        cgpa: '4.0',
-        declaration: true,
-        status: 'accepted'
-      });
-    }
-    const hashedStudentPassword = await bcrypt.hash(defaultStudentPassword, 10);
-    await Student.create({ email: studentTestEmail, password: hashedStudentPassword, application_id: app.id, is_active: true });
-    console.log(`✅ Test student account created: ${studentTestEmail} / ${defaultStudentPassword}`);
-  }
+//     await Admin.create({
+//       name: 'Super Admin',
+//       email: 'admin@alikpeafoundation.org',
+//       password: hashed,
+//       role: 'super_admin'
+//     });
+//   }
 
-  console.log('✅ Database initialized');
-}
+//   console.log('✅ Database initialized');
+// }
 
-app.listen(PORT, '0.0.0.0', async () => {
+// Start server WITHOUT database for demo
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 ALIF Foundation Portal running on port ${PORT}`);
-  await initDB();
+  console.log('ℹ️ Demo mode: database initialization is temporarily disabled.');
 });
 
 module.exports = app;
