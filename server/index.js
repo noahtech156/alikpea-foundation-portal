@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
 // Security middleware
 app.use(helmet({ contentSecurityPolicy: false }));
@@ -46,49 +46,55 @@ app.get('*', (req, res) => {
 
 // =====================================================
 // DATABASE INITIALIZATION
-// Temporarily disabled for the client demo.
-// We will enable this again when Railway MySQL is ready.
+// The database connection is initialized in the background,
+// AFTER the server has started listening. Any failure here
+// is logged but never prevents the server from starting or
+// crashes the process — HTTP routes remain usable even if
+// the database is temporarily unreachable.
 // =====================================================
 
-// const {
-//   sequelize,
-//   ensureDatabaseExists,
-//   Admin,
-//   Student,
-//   Application,
-//   NewsTicker,
-//   SiteSetting
-// } = require('./models');
+const {
+  sequelize,
+  ensureDatabaseExists,
+  Admin
+} = require('./models');
 
-// async function initDB() {
-//   await ensureDatabaseExists();
-//   await sequelize.authenticate();
-//   await sequelize.sync({ alter: true });
+async function initDB() {
+  await ensureDatabaseExists();
+  await sequelize.authenticate();
+  await sequelize.sync({ alter: true });
 
-//   // Seed default admin
-//   const adminExists = await Admin.findOne({
-//     where: { email: 'admin@alikpeafoundation.org' }
-//   });
+  // Seed default admin
+  const adminExists = await Admin.findOne({
+    where: { email: 'admin@alikpeafoundation.org' }
+  });
 
-//   if (!adminExists) {
-//     const bcrypt = require('bcryptjs');
-//     const hashed = await bcrypt.hash('Admin@ALIF2026', 10);
+  if (!adminExists) {
+    const bcrypt = require('bcryptjs');
+    const hashed = await bcrypt.hash('Admin@ALIF2026', 10);
 
-//     await Admin.create({
-//       name: 'Super Admin',
-//       email: 'admin@alikpeafoundation.org',
-//       password: hashed,
-//       role: 'super_admin'
-//     });
-//   }
+    await Admin.create({
+      name: 'Super Admin',
+      email: 'admin@alikpeafoundation.org',
+      password: hashed,
+      role: 'super_admin'
+    });
+  }
 
-//   console.log('✅ Database initialized');
-// }
+  console.log('✅ Database initialized');
+}
 
-// Start server WITHOUT database for demo
+// Start the server immediately, regardless of database status.
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 ALIF Foundation Portal running on port ${PORT}`);
-  console.log('ℹ️ Demo mode: database initialization is temporarily disabled.');
+
+  // Attempt to initialize the database in the background. Any error is
+  // caught and logged only — it must never crash the running server.
+  initDB()
+    .catch((err) => {
+      console.error('⚠️ Database initialization failed. Continuing without a database connection.');
+      console.error(err);
+    });
 });
 
 module.exports = app;
